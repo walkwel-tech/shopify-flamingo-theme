@@ -1,0 +1,103 @@
+// ======================================
+// ======= Product Page Functions =======
+// ======================================
+
+
+
+var $addToCart = $("#addToCart");
+var $addToCartForm = $("#addToCartForm");
+
+
+
+ShopScript.productAddToCartHijack = function() {
+  
+  $addToCart.on('click', function(e) {
+    e.preventDefault();
+    hijackATC();
+  });
+
+  function hijackATC() {
+  debugger;
+    var $mainProductImage = $('#productPhotos .carousel-cell.is-selected img');
+    var $visibleCartToggle = $('.cart-toggle:visible');
+    var $attachmentCheckboxes = $('.attachment-checkbox:checked[data-attachmentid]');
+    var $initBundleIdEl = $('#attachmentBundleId');
+    
+    if($attachmentCheckboxes.length > 0) {
+      $initBundleIdEl.prop('disabled', false);
+      var bundleTimestamp = new Date().getTime();
+      var initBundleId = $initBundleIdEl.val() != null ? $initBundleIdEl.val() : '';
+      if (initBundleId.split("-").length < 2) {
+        $initBundleIdEl.val(initBundleId + '-' + bundleTimestamp);
+      }
+      else {
+        $initBundleIdEl.val(initBundleId.split('-')[0] + '-' + bundleTimestamp);
+      }
+      var attachmentBundleId = $initBundleIdEl.val();
+
+      Shopify.productQueue = [];
+
+      $attachmentCheckboxes.each(function(i,e) {
+        var attachmentId = $(e).data('attachmentid');
+        var attachmentJSON = {
+          "id": attachmentId,
+          "quantity": 1
+        }
+
+        Shopify.productQueue.push( attachmentJSON );
+
+        if(i == ($attachmentCheckboxes.length-1)) {						
+          Shopify.processProductQueue = function() {
+            // If we still have requests in the queue, let's process the next one.
+            if (Shopify.productQueue.length) {
+              var queueRequest = Shopify.productQueue.shift();
+              Shopify.addItemJSON(queueRequest, Shopify.processProductQueue);
+            }
+            else {
+              $addToCartForm.submit();
+              flyToElement($mainProductImage, $visibleCartToggle);
+            }
+          };
+          Shopify.processProductQueue();
+        }
+      });
+
+    } else {
+      $initBundleIdEl.prop('disabled', true);
+      $addToCartForm.submit();
+      flyToElement($mainProductImage, $visibleCartToggle);
+    }
+  }
+}
+
+
+
+
+
+
+
+
+// One Click Checkout
+ShopScript.oneClickCheckout = function() {
+  $('#oneClickCheckoutBtn').click(function(event) {
+ // debugger;
+    var ageCheck = confirm('You must be over 21 years of age or older to checkout.\n\nPress OK to confirm you are over the age of 21.\n\nWe probit sales to minors and orders may be subject to fraud check.'); 
+    if (ageCheck === true) {
+      Shopify.addItemFromForm('#addToCartForm', function() {
+        $('#straightToCart').trigger('click');
+      });
+    }
+    event.preventDefault();
+    return false;
+  });
+}
+
+
+
+
+
+
+
+
+ShopScript.productAddToCartHijack();
+ShopScript.oneClickCheckout();

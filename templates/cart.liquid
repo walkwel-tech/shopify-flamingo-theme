@@ -1,0 +1,156 @@
+<!-- /templates/cart.liquid -->
+{% comment %}
+
+  For info on test orders:
+    - General http://docs.shopify.com/manual/your-store/orders/test-orders
+    - Shopify Payments - http://docs.shopify.com/manual/more/shopify-payments/testing-shopify-payments
+
+{% endcomment %}
+{% include 'infonavbar' %}
+<main class="wrapper main-content" role="main">
+{% if cart.item_count > 0 %}
+
+
+  <div class="mainmn"> 
+  <form action="/cart" method="post" novalidate class="cart table-wrap" id="cart-form">  
+    <div class="popupcontent">
+        <h2>shopping cart</h2>
+        <div class="cart_table_div"> 
+        
+            <table class="cart_table">
+              <thead>
+                  <th colspan="2">items</th>
+                  <th>price</th>
+                  <th>quantity</th>
+                  <th>total</th>
+                  <th></th>
+              </thead>
+              <tbody>
+              {% for item in cart.items %}
+                <tr>
+                    <td class="table_img"><img src="{{ item | img_url: 'medium' }}"></td>
+                    <td><h4 class="table_product_name"><a href="{{ item.url | within: collections.all }}">{{ item.product.title }} </a></h4>
+                        <!--{% unless item.variant.title contains 'Default' %}
+                          <br>
+                          <small>{{ item.variant.title }}</small>
+                        {% endunless %}-->
+
+                        {% if settings.cart_vendor_enable %}
+                          <p>{{ item.vendor }}</p>
+                        {% endif %}
+
+                        {% comment %}{% assign property_size = item.properties | size %}
+                        {% if property_size > 0 %}
+                          {% for p in item.properties %}
+                            {% unless p.last == blank %}
+                               <span class="subhd_prod">{{ p.first }}:</span>
+
+                              {% comment %}
+                                Check if there was an uploaded file associated
+                              {% endcomment %}
+                              {% if p.last contains '/uploads/' %}
+                                <a href="{{ p.last }}">{{ p.last | split: '/' | last }}</a>
+                              {% else %}
+                               <span class="subhd_prod"> {{ p.last }} </span>
+                              {% endif %}
+
+                              <br>
+                            {% endunless %}
+                          {% endfor %}
+                        {% endif %}
+                      {% endcomment %}
+                    </td>
+                    <td><h2><sup class="dollar">$</sup>{{ item.price | money_without_currency }}</h2> </td>
+                    <td class="range_value">
+                        <!--   range 
+                        <div id="demo">
+                            <div id="sliderPosition">1</div>  
+                        </div>
+                        <div id="increase">
+                          + 
+                      </div>
+                      <div id="decrease">
+                         - 
+                     </div>
+                     <!--   range -->
+
+                     <input type="number" name="updates[]" id="updates_{{ item.key }}" data-id="{{ item.key }}" value="{{ item.quantity }}" min="0">
+
+                 </td>
+                 <td><h2><sup class="dollar">$</sup>{% if item.original_line_price != item.line_price %}{{ item.original_line_price | money_without_currency }}{% endif %}{{ item.line_price | money_without_currency }}
+                  {% for discount in item.discounts %}
+                    <span class="cart-item__discount">{{ discount.title }}</span>
+                  {% endfor %} </h2>
+                  </td>
+                 <td>
+                  <a href="/cart/change?line={{ forloop.index }}&amp;quantity=0" class="cart__remove">
+                  <!---  <span class="icon icon-x" aria-hidden="true">{{ 'cart.general.remove' | t }}</span> --->
+                     <span class="icon icon-x" aria-hidden="true"></span>
+                  </a>
+                 </td>
+             </tr>
+             {% endfor %}
+ </tbody>
+</table>
+
+</div>
+
+<div class="width_full">
+    <span class="subtotal_price">Subtotal </span><span class="subtotal_amount"> <sup class="dollar">$</sup>{{ cart.total_price | money_without_currency }} </span>
+    <div class="certified_line"><input type="checkbox" id="age_certify" /> I certify that I am over 21 years of age. <br> <strong>An adult signature may be required upon delivery.</strong></div>
+
+    <div class="checkout_btn">
+      <img src="{{ 'cart.png' | asset_url }}" />
+      <input type="submit" value="checkout" name="checkout" id="checkout_check" />
+    </div>
+    <button type="submit" name="update" class="btn--secondary update-cart">{{ 'cart.general.update' | t }}</button>
+</div>
+
+</div>
+</form>
+
+{% else %}
+  {% comment %}
+    The cart is empty
+  {% endcomment %}
+  <div style="text-align: center; margin: 35px 0 20px;">
+    <img src="{{ 'empty_cart.png' | asset_url }}" width="200px" />
+    <h2>{{ 'cart.general.empty' | t }}</h2>
+    <p>Please add some items in your cart first.</p>
+    <!--<p>{{ 'cart.general.continue_browsing_html' | t }}</p>-->
+    <p>Continue browsing <a href="/">here</a>.</p>
+  </div>
+{% endif %}
+</main>
+
+<script type="text/javascript">
+  
+  // $('#age_certify').change(function(e) {
+    
+  //   if($('#age_certify').prop("checked") != true) {
+  //     alert("You must be over 21 years of age to order.  We probit sales to minors and orders may be subject to a fraud check.");
+  //     $('.certified_line').css({'color': 'red'});
+  //     $('#checkout_check').attr('disabled', true);
+  //   }
+  //   else {
+  //     $('#checkout_check').attr('disabled', false);
+  //   }
+  // });
+
+  $('#checkout_check').click(function(e) {
+     if($('#age_certify').prop("checked") != true) {
+      e.preventDefault();
+      alert("You must be over 21 years of age to order.  We probit sales to minors and orders may be subject to a fraud check.");
+      $('.certified_line').css({'color': 'red'});
+     }
+     else {
+      $('#checkout_check').click();
+     }
+  });
+
+  // if($('#age_certify').prop("checked") != true) {
+  //     //alert("You must be over 21 years of age to order.  We probit sales to minors and orders may be subject to a fraud check.");
+  //     //$('.certified_line').css({'color': 'red'});
+  //   $('#checkout_check').attr('disabled', true);
+  // }
+</script>

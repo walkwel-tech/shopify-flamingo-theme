@@ -1,0 +1,679 @@
+<!doctype html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if IE 9 ]><html class="ie9 no-js"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+
+  <!-- Basic page needs ================================================== -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta name="viewport" content="width=device-width, initial-scale=0, maximum-scale=0, user-scalable=0"/>
+
+  {% if settings.favicon_enable %}
+  <link rel="shortcut icon" href="{{ 'favicon.png' | asset_url }}" type="image/png" />
+  {% endif %}
+
+  <!-- Title and description ================================================== -->
+  <title>
+  {{ page_title }}{% if current_tags %}{% assign meta_tags = current_tags | join: ', ' %} &ndash; {{ 'general.meta.tags' | t: tags: meta_tags }}{% endif %}{% if current_page != 1 %} &ndash; {{ 'general.meta.page' | t: page: current_page }}{% endif %}{% unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless %}
+  </title>
+
+  {% if page_description %}
+  <meta name="description" content="{{ page_description | escape }}">
+  {% endif %}
+
+  <!-- Helpers ================================================== -->
+  {% include 'social-meta-tags' %}
+  <link rel="canonical" href="{{ canonical_url }}">
+  <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+  <meta name="theme-color" content="{{ settings.color_primary }}">
+
+  <!-- CSS ================================================== -->
+  {{ 'timber.scss.css' | asset_url | stylesheet_tag }}
+  
+  {{ 'fonts.scss' | asset_url | stylesheet_tag }}
+  {{ 'style.scss' | asset_url | stylesheet_tag }}
+  {{ 'style2.scss' | asset_url | stylesheet_tag }}
+  {{ 'style3.scss' | asset_url | stylesheet_tag }}
+  {{ 'styleproductslider.scss' | asset_url | stylesheet_tag }}
+  {{ 'lightslider.scss' | asset_url | stylesheet_tag }}
+  {{ 'stylew.scss' | asset_url | stylesheet_tag }}
+  {{ 'remodal.css' | asset_url | stylesheet_tag }}
+  {{ 'remodal-default-theme.css' | asset_url | stylesheet_tag }}
+ 
+  
+  <!-- Header hook for plugins ================================================== -->
+  {{ content_for_header }}
+  {% include 'oldIE-js' %}
+
+  
+  {{ 'modernizr.min.js' | asset_url | script_tag }}
+  {{ 'js1.js' | asset_url | script_tag }}
+  
+  {{ 'js4.js' | asset_url | script_tag }}
+  {{ 'js7.js' | asset_url | script_tag }}
+  {{ 'js16.js' | asset_url | script_tag }}
+  {{ 'vendor.js' | asset_url | script_tag }}
+  {{ 'flamingo-theme.js' | asset_url | script_tag }}
+  {% comment %}
+    If you store has customer accounts disabled, you can remove the following JS file
+  {% endcomment %}
+  {% if template contains 'customers' %}
+    {{ 'shopify_common.js' | shopify_asset_url | script_tag }}
+  {% endif %}
+  <!-- product slider -->
+  {{ 'jquery.min.js' | asset_url | script_tag }}
+  {{ 'jquery.flexisel.js' | asset_url | script_tag }}
+  {{ 'lightslidermin.js' | asset_url | script_tag }}
+  {{ 'remodal.min.js' | asset_url | script_tag }}
+  {{ 'jquery.slimscroll.min.js' | asset_url | script_tag }}
+  {{ 'https://pink-flamingo.herokuapp.com/scripts/script.js' | script_tag }}
+  {{ 'https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js' | script_tag }}
+</head>
+
+{% comment %}
+  Add the page template as a class for easy page or template specific styling.
+{% endcomment %}
+<body id="{{ page_title | handle }}" class="{% if customer %}customer-logged-in {% endif %}template-{{ template | replace: '.', ' ' | truncatewords: 1, '' | handle }}" >
+<!-- Sidebar Nav -->
+  <nav id="slideoutNav" class="slideout-nav nav-loaded">
+        <div class="sn--trigger-tab">
+            <a href="#" class="">
+                <span class="tab-block-left" data-target-id="site-menu">
+          <svg width="100%" height="100%"><use xlink:href="#dsGreenLeafLogo" xmlns:xlink="#"/></svg>
+        </span>
+                <span class="tab-block-right" data-target-id="site-menu">
+          <img src="{{ 'menuicon.png' | asset_url }}" class="menuiconclass" />
+        </span>
+            </a>
+        </div>
+        <div class="sn--header">
+            <div class="sn--header-inner">
+                <button id="closeSlideoutBtn" class="modal-close-btn modal-close-btn--white" aria-label="close">
+                    <svg width="100%" height="100%">
+                        <use xlink:href="#closeBtnX" xmlns:xlink="#" />
+                    </svg>
+                </button>
+                <span>Menu</span>
+            </div>
+        </div>
+        <div class="sn--inner" style="display: block;">
+            <div class="sn--inner">
+                <div class="sn--menu">
+                    <form action="/search" method="get" class="sn--search-bar" role="search" itemprop="potentialAction" itemscope="" itemtype="#">
+                        <input name="type" value="product" type="hidden">
+                        <meta itemprop="target" content="#">
+                        <input itemprop="" tabindex="-1" placeholder="Search all products..." aria-label="Search all products..." type="text" name="q">
+                        <button type="submit" class="sn--search-submit icon-fallback-text">
+                            <svg width="100%" height="100%">
+                                <use xlink:href="#dsSearchIcon" xmlns:xlink="#" />
+                            </svg>
+                        </button>
+                    </form>
+                   <!-- <ul id="main-nav" role="navigation" class="sn--link-list"> 
+
+                    {% for link in linklists.main-menu.links %}
+                    <li aria-haspopup="true" >{{ link.title | link_to: link.url }}
+                      {% capture child_list_handle %}{{ link.title | handleize }}{% endcapture %}
+                      {% if linklists[child_list_handle] and linklists[child_list_handle].links.size > 0 %}
+                          <ul class="sub">
+                        {% for l in linklists[child_list_handle].links %}
+                        <li><a href="{{ l.url }}">{{ l.title }}</a>
+                          
+                          {% capture child_list_handle %}{{ l.title | handleize }}{% endcapture %}
+                          {% if linklists[child_list_handle] and linklists[child_list_handle].links.size > 0 %} 
+                          <span class="rightarrow"><i class="icon-chevron-right"></i></span>
+                          <ul class="submenu">
+                            {% for l in linklists[child_list_handle].links %}
+                            <li><a href="{{ l.url }}">{{ l.title }}</a></li>
+                            {% endfor %}
+                          </ul>
+                          {% endif %}
+                          
+                        </li>
+                        {% endfor %}
+                      </ul>
+                      {% endif %}
+                    </li>
+                    {% endfor %}
+                  </ul> 
+                  <div class="clear"></div> -->
+                    <ul class="sn--link-list">
+                      {% for collection in collections %}
+                        {% if collection.image %}
+                        <li>
+                            <a href="{{ collection.url }}">
+                                <div class="sn--imod">
+                                  <img class="lazyloaded" src="{{ collection.image | img_url: 'medium' }}" width="40" height="40" style="margin-right: 20px;">
+                                    <noscript><img src="{{ collection.image | img_url: 'medium' }}" /></noscript>
+                                </div>{{ collection.title }}
+                            </a>
+                        </li>
+                        {% endif %}
+                      {% endfor %}
+                    </ul>
+                    <div class="sn--sub-footer">
+                      <span>
+                        © 2017 Pinkflamingo.com
+                      </span>
+                      <span>
+                        All rights reserved
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+    </nav>
+<!-- Sidebar Nav -->
+  <div id="NavDrawer" class="drawer drawer--left">
+    <div class="drawer__header">
+      <div class="drawer__title h3">{{ 'layout.drawers.browse' | t }}</div>
+      <div class="drawer__close js-drawer-close">
+        <button type="button" class="icon-fallback-text">
+          <span class="icon icon-x" aria-hidden="true"></span>
+          <span class="fallback-text">{{ 'layout.drawers.close_menu' | t }}</span>
+        </button>
+      </div>
+    </div>
+    <!-- begin mobile-nav -->
+    <ul class="mobile-nav">
+      <li class="mobile-nav__item mobile-nav__search">
+        {% include 'search-bar' %}
+      </li>
+      {% for link in linklists.main-menu.links %}
+        {% comment %}
+          Create a dropdown menu by naming a linklist the same as a link in the parent nav
+
+          More info on dropdowns:
+            - http://docs.shopify.com/manual/your-website/navigation/create-drop-down-menu
+        {% endcomment %}
+        {% assign child_list_handle = link.title | handleize %}
+        {% if linklists[child_list_handle].links != blank %}
+          <li class="mobile-nav__item{% if link.active %} mobile-nav__item--active{% endif %}" aria-haspopup="true">
+            <div class="mobile-nav__has-sublist">
+              <a href="{{ link.url }}" class="mobile-nav__link">{{ link.title }}</a>
+              <div class="mobile-nav__toggle">
+                <button type="button" class="icon-fallback-text mobile-nav__toggle-open">
+                  <span class="icon icon-plus" aria-hidden="true"></span>
+                  <span class="fallback-text">See More</span>
+                </button>
+                <button type="button" class="icon-fallback-text mobile-nav__toggle-close">
+                  <span class="icon icon-minus" aria-hidden="true"></span>
+                  <span class="fallback-text">{{ 'cart.general.close_cart' | t | json }}</span>
+                </button>
+              </div>
+            </div>
+            <ul class="mobile-nav__sublist">
+              {% for childlink in linklists[child_list_handle].links %}
+                <li class="mobile-nav__item {% if childlink.active %} mobile-nav__item--active{% endif %}">
+                  <a href="{{ childlink.url }}" class="mobile-nav__link">{{ childlink.title | escape }}</a>
+                </li>
+              {% endfor %}
+            </ul>
+          </li>
+        {% else %}
+          <li class="mobile-nav__item{% if link.active %} mobile-nav__item--active{% endif %}">
+            <a href="{{ link.url }}" class="mobile-nav__link">{{ link.title }}</a>
+          </li>
+        {% endif %}
+      {% endfor %}
+
+      {% comment %}
+        If customer accounts are enabled, provide login and create account links
+      {% endcomment %}
+      {% if shop.customer_accounts_enabled %}
+        {% if customer %}
+          <li class="mobile-nav__item">
+            {% if customer.first_name != blank %}
+              {% capture first_name %}{{ customer.first_name }}{% endcapture %}
+              <a href="/account">{{ 'layout.customer.logged_in_as_html' | t: first_name: first_name }}</a>
+            {% else %}
+              <a href="/account">{{ 'layout.customer.account' | t }}</a>
+            {% endif %}
+          </li>
+          <li class="mobile-nav__item">
+            {{ 'layout.customer.log_out' | t | customer_logout_link }}
+          </li>
+        {% else %}
+          <li class="mobile-nav__item">
+            {{ 'layout.customer.log_in' | t | customer_login_link }}
+          </li>
+          <li class="mobile-nav__item">
+            {{ 'layout.customer.create_account' | t | customer_register_link }}
+          </li>
+        {% endif %}
+      {% endif %}
+    </ul>
+    <!-- //mobile-nav -->
+  </div>
+  {% if settings.ajax_cart_method == "drawer" %}
+    <div id="CartDrawer" class="drawer drawer--right">
+      <div class="drawer__header">
+        <div class="drawer__title h3">{{ 'cart.general.title' | t }}</div>
+        <div class="drawer__close js-drawer-close">
+          <button type="button" class="icon-fallback-text">
+            <span class="icon icon-x" aria-hidden="true"></span>
+            <span class="fallback-text">{{ 'cart.general.close_cart' | t | json }}</span>
+          </button>
+        </div>
+      </div>
+      <div id="CartContainer"></div>
+    </div>
+  {% endif %}
+  <div id="PageContainer" class="is-moved-by-drawer">
+    <!--<header class="site-header medium-down--hide">
+
+        <div class="main-header">
+            <div class="header-wrapper">
+                <div class="grid--full">
+                    <div class="grid-item large--one-quarter header-logo">
+                      {% if settings.logo_use_image %}
+                        <a href="/"><h1 class="logo-leaf site--main-logo">
+                          <img src="{{ 'logo.png' | asset_url }}" alt="{{ shop.name }}">
+                
+                        </h1></a>
+                        {% else %}
+                          <a href="/" itemprop="url">{{ shop.name }}</a>
+                        {% endif %}
+                    </div>
+                    <div class="grid-item large--three-quarters text-right">
+
+                        <div class="search-container">
+                            <form action="/search" method="get" class="search-bar" role="search">
+                                <input name="type" value="product" type="hidden">
+                                <input id="mainSiteSearch" data-findify-attr="findify-autocomplete-input" tabindex="-1" name="q" value="" placeholder="Search all products..." aria-label="Search all products..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" type="search">
+                                <button type="submit" class="search-bar--submit">
+                                    <svg width="100%" height="100%">
+                                        <use xlink:href="#dsSearchIcon" xmlns:xlink="#" />
+                                    </svg>
+                                </button>
+                            </form>
+                        </div>
+                        <div id="customerMenu" class="dropdown-trigger medium-down--hide"><span class="dropdown-trigger-text">
+<svg width="100%" height="100%"><use xlink:href="#dsAccountIcon" xmlns:xlink="#"/></svg>
+<span>Hi, </span>
+                            <a class="customer-sign-in-link" href="/account/login">Sign in</a>
+                            </span>
+                            <div id="new-customer-DropDown" class="dropdown-menu">
+                                <div class="sign-in-button">
+                                    <button class="btn">
+                                        <a href="/account/login">Sign in</a>
+                                    </button>
+                                </div>
+                                <div class="create-account-link">New customer?<a href="/account/register" id="customer_register_link">Create an Account</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <a href="/cart" class="header-cart-btn cart-toggle">
+            <svg width="100%" height="100%">
+                <use xlink:href="#dsCartIcon" xmlns:xlink="#" />
+            </svg>
+            <span class="number-font cart-count cart-badge--desktop hidden-count">0</span>
+        </a>
+    </header> -->
+
+    <header class="site-header medium-down--hide">
+
+        <div class="main-header">
+            <div class="header-wrapper">
+                <div class="width100 header_main_rel">
+                    
+                    <div class="search-container">
+                            <form action="/search" method="get" class="search-bar" role="search">
+                                <input name="type" value="product" type="hidden">
+                                <input id="mainSiteSearch" data-findify-attr="findify-autocomplete-input" name="q" value="" placeholder="Search all products..." aria-label="Search all products..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" type="search">
+
+                                <button type="submit" class="search-bar--submit">
+                                    <svg width="100%" height="100%">
+                                        <use xlink:href="#dsSearchIcon" xmlns:xlink="#"></use>
+                                    </svg>
+                                </button>
+                                <div class="searchicon"><img src="{{ 'search.png' | asset_url }}" width="40px" /></div>
+                            </form>
+
+                        </div>
+
+                    <div class="headerlogo">
+                    {% if settings.logo_use_image %}
+                        <a href="/"> <img src="{{ 'logo.png' | asset_url }}" alt="{{ shop.name }}"></a>
+                    {% endif %}
+                    </div>
+
+                  
+
+                       
+                      {% if customer %}
+
+                        <div class="signin_up">
+                            <a href="/cart"><img src="{{ 'cart-white.png' | asset_url }}" style="margin-right: 8px;" alt="{{ shop.name }}">CART</a>
+                        </div>
+
+                        <div class="signin_up-forMobile">
+                         <a href="/cart"><img width="16" src="data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTYuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjI0cHgiIGhlaWdodD0iMjRweCIgdmlld0JveD0iMCAwIDUxMCA1MTAiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDUxMCA1MTA7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4KPGc+Cgk8ZyBpZD0ic2hvcHBpbmctY2FydCI+CgkJPHBhdGggZD0iTTE1Myw0MDhjLTI4LjA1LDAtNTEsMjIuOTUtNTEsNTFzMjIuOTUsNTEsNTEsNTFzNTEtMjIuOTUsNTEtNTFTMTgxLjA1LDQwOCwxNTMsNDA4eiBNMCwwdjUxaDUxbDkxLjgsMTkzLjhMMTA3LjEsMzA2ICAgIGMtMi41NSw3LjY1LTUuMSwxNy44NS01LjEsMjUuNWMwLDI4LjA1LDIyLjk1LDUxLDUxLDUxaDMwNnYtNTFIMTYzLjJjLTIuNTUsMC01LjEtMi41NS01LjEtNS4xdi0yLjU1MWwyMi45NS00My4zNWgxODguNyAgICBjMjAuNCwwLDM1LjctMTAuMiw0My4zNS0yNS41TDUwNC45LDg5LjI1YzUuMS01LjEsNS4xLTcuNjUsNS4xLTEyLjc1YzAtMTUuMy0xMC4yLTI1LjUtMjUuNS0yNS41SDEwNy4xTDg0LjE1LDBIMHogTTQwOCw0MDggICAgYy0yOC4wNSwwLTUxLDIyLjk1LTUxLDUxczIyLjk1LDUxLDUxLDUxczUxLTIyLjk1LDUxLTUxUzQzNi4wNSw0MDgsNDA4LDQwOHoiIGZpbGw9IiMzNjM2MzYiLz4KCTwvZz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8L3N2Zz4K" /></a>
+                        </div>
+                        <div id="customerMenu" class="dropdown-trigger medium-down--hide" style="float: right;"><span class="dropdown-trigger-text">
+<svg width="100%" height="100%"><use xlink:href="#dsAccountIcon" xmlns:xlink="#"/></svg>
+<span class="hi_text">Hi, </span>
+                          <a class="customer-sign-in-link" href="#"> {{ customer.name }}</a>
+                            </span>
+                             <div id="new-customer-DropDown" class="dropdown-menu">
+                                <div class="sign-in-button">
+                                  <a href="/account">My Orders</a>
+                                </div>
+                                <div class="sign-in-button">
+                                  <a href="/account/logout">Logout</a>
+                                </div>
+                            </div>
+                        </div>
+
+                      {% else %}
+                        <div class="signin_up">
+                            <a href="/account/login">SIGN IN</a>
+                            <a href="/account/register">SIGN UP
+                            </a>
+                            <a href="/cart"><img src="{{ 'cart-white.png' | asset_url }}" style="margin-right: 8px;" alt="{{ shop.name }}">CART</a>
+                        </div>
+                        <div class="signin_up-forMobile">
+                            <a href="/account/login">
+                              <img width="16" src="data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTYuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjUxMnB4IiBoZWlnaHQ9IjUxMnB4IiB2aWV3Qm94PSIwIDAgNDI3Ljc4NCA0MjcuNzg0IiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCA0MjcuNzg0IDQyNy43ODQ7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4KPGc+Cgk8cGF0aCBkPSJNMTcxLjU0OCwzMjAuNTYzbDExNC42OTktMTE0LjcyNGMzNy4zNzMsMTMuMjEsODAuNTU0LDUuMjExLDExMC40NjUtMjQuNjQyYzQxLjQzLTQxLjQ2LDQxLjQzLTEwOC42ODUsMC0xNTAuMDg5ICAgYy00MS40NjMtNDEuNDYtMTA4LjY1OS00MS40Ni0xNTAuMTE3LDBjLTI5Ljg4MywyOS44NTMtMzcuODgyLDczLjAzMy0yNC42NzUsMTEwLjQwN0wwLDM2My40NDlsMTAuNzIzLDUzLjYwNWw1My42MDIsMTAuNzE2ICAgbDIxLjQ0My0yMS40MzZoNDIuODgzdi00Mi44ODZoNDIuODk3VjMyMC41NjNMMTcxLjU0OCwzMjAuNTYzeiBNMzMyLjM1Nyw5NS40MzNjLTExLjgyMS0xMS44NDUtMTEuODIxLTMxLjAzNiwwLTQyLjg4MSAgIGMxMS44NDUtMTEuODQ1LDMxLjA2NC0xMS44NDUsNDIuOTA5LDBjMTEuODE2LDExLjg0NSwxMS44MTYsMzEuMDM2LDAsNDIuODgxQzM2My40MjEsMTA3LjI4LDM0NC4yMDIsMTA3LjI4LDMzMi4zNTcsOTUuNDMzeiIgZmlsbD0iIzM2MzYzNiIvPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+Cjwvc3ZnPgo=" /></a>
+                            <a href="/account/register">
+                              <img width="16" src="data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTYuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjI0cHgiIGhlaWdodD0iMjRweCIgdmlld0JveD0iMCAwIDI3LjAyMSAyNy4wMjIiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDI3LjAyMSAyNy4wMjI7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4KPGc+Cgk8Zz4KCQk8cGF0aCBkPSJNMTcuODU1LDIxLjIyM2MwLTEuOTAyLDEuMDQ5LTMuNTUsMi41ODgtNC40NGMtMC45NjMtMC4zMDgtMi0wLjU1Mi0zLjA5LTAuNzIyYzIuMzQyLTEuMjk5LDMuOTI5LTMuNzk0LDMuOTI5LTYuNjYzICAgIGMwLTQuMjA3LTMuNDEtNy42MTctNy42MTctNy42MTdzLTcuNjE3LDMuNDEtNy42MTcsNy42MTdjMCwyLjg2OCwxLjU4Nyw1LjM2NCwzLjkyOSw2LjY2M0M0LjIyMywxNi45NTgsMCwxOS44OTcsMCwyMy4zODloMTguMzUgICAgQzE4LjA0MSwyMi43MjcsMTcuODU1LDIyLDE3Ljg1NSwyMS4yMjN6IiBmaWxsPSIjMzYzNjM2Ii8+Cgk8L2c+Cgk8cGF0aCBkPSJNMjMuMDA0LDE3LjIwNmMtMi4yMTgsMC00LjAxOCwxLjc5Ny00LjAxOCw0LjAxOGMwLDIuMjE5LDEuOCw0LjAxNyw0LjAxOCw0LjAxN2MyLjIxOSwwLDQuMDE4LTEuNzk4LDQuMDE4LTQuMDE3ICAgQzI3LjAyLDE5LjAwMiwyNS4yMjMsMTcuMjA2LDIzLjAwNCwxNy4yMDZ6IE0yNS42MjcsMjEuOTM2aC0xLjkwOXYxLjkxaC0xLjQyN3YtMS45MWgtMS45MXYtMS40MjloMS45MXYtMS45MTFoMS40Mjd2MS45MTFoMS45MDkgICBWMjEuOTM2eiIgZmlsbD0iIzM2MzYzNiIvPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+Cjwvc3ZnPgo=" /> </a>
+                            <a href="/cart"><img width="16" src="data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTYuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjI0cHgiIGhlaWdodD0iMjRweCIgdmlld0JveD0iMCAwIDUxMCA1MTAiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDUxMCA1MTA7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4KPGc+Cgk8ZyBpZD0ic2hvcHBpbmctY2FydCI+CgkJPHBhdGggZD0iTTE1Myw0MDhjLTI4LjA1LDAtNTEsMjIuOTUtNTEsNTFzMjIuOTUsNTEsNTEsNTFzNTEtMjIuOTUsNTEtNTFTMTgxLjA1LDQwOCwxNTMsNDA4eiBNMCwwdjUxaDUxbDkxLjgsMTkzLjhMMTA3LjEsMzA2ICAgIGMtMi41NSw3LjY1LTUuMSwxNy44NS01LjEsMjUuNWMwLDI4LjA1LDIyLjk1LDUxLDUxLDUxaDMwNnYtNTFIMTYzLjJjLTIuNTUsMC01LjEtMi41NS01LjEtNS4xdi0yLjU1MWwyMi45NS00My4zNWgxODguNyAgICBjMjAuNCwwLDM1LjctMTAuMiw0My4zNS0yNS41TDUwNC45LDg5LjI1YzUuMS01LjEsNS4xLTcuNjUsNS4xLTEyLjc1YzAtMTUuMy0xMC4yLTI1LjUtMjUuNS0yNS41SDEwNy4xTDg0LjE1LDBIMHogTTQwOCw0MDggICAgYy0yOC4wNSwwLTUxLDIyLjk1LTUxLDUxczIyLjk1LDUxLDUxLDUxczUxLTIyLjk1LDUxLTUxUzQzNi4wNSw0MDgsNDA4LDQwOHoiIGZpbGw9IiMzNjM2MzYiLz4KCTwvZz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8Zz4KPC9nPgo8L3N2Zz4K" /></a>
+                        </div>
+
+                      {% endif %}
+
+
+                   
+                </div>
+            </div>
+        </div>
+        <a href="/cart" class="header-cart-btn cart-toggle">
+            <svg width="100%" height="100%">
+                <use xlink:href="#dsCartIcon" xmlns:xlink="#"></use>
+            </svg>
+            <span class="number-font cart-count cart-badge--desktop hidden-count">0</span>
+        </a>
+    </header>
+
+    <!-- Home Page Content -->
+
+      {{ content_for_layout }}
+
+    <!-- Home Page Content -->
+
+    <!-- Site Footer start -->
+    <footer class="site-footer">
+        <div class="wrapper">
+        {% if settings.footer_newsletter_enable %}
+            <div class="newsletter-signup">
+                <div class="newsletter-signup-container">
+                    <div class="grid">
+                        <div class="grid-item large--one-sixth push--large--one-sixth signup-label">
+                            <h3>Newsletter</h3>
+                        </div>
+                        <div class="grid-item large--three-sixths push--large--one-sixth signup-form">
+                        {% if settings.newsletter_form_action != blank %}
+                            <form action="{{ settings.newsletter_form_action }}" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" target="_blank" class="input-group grid">
+                                <div class="grid-item medium--seven-tenths large--seven-tenths">
+                                    <input value="" placeholder="Email Address" name="EMAIL" id="mail" class="input-group-field" aria-label="Email Address" type="email">
+                                </div>
+                                <div class="grid-item medium--three-tenths large--three-tenths">
+                                    <span class="input-group-btn">
+                                      <input class="btn-secondary btn--small" value="{{ 'general.newsletter_form.submit' | t }}" name="subscribe" id="subscribe" type="submit">
+                                    </span>
+                                </div>
+                            </form>
+                            {% else %}
+                              {% form 'customer' %}
+                                
+                                  <div class="input-group">
+                                    <input type="email" value="{% if customer %}{{ customer.email }}{% endif %}" placeholder="{{ 'general.newsletter_form.newsletter_email' | t }}" name="contact[email]" id="Email" class="input-group-field" aria-label="{{ 'general.newsletter_form.newsletter_email' | t }}" autocorrect="off" autocapitalize="off">
+                                    <input type="hidden" name="contact[tags]" value="newsletter">
+                                    <span class="input-group-btn">
+                                      <input type="submit" class="btn" tabindex="-1" name="subscribe" id="subscribe" value="{{ 'general.newsletter_form.submit' | t }}">
+                                    </span>
+                                  </div>
+                                  {{ form.errors | default_errors }}
+                                {% if form.posted_successfully? %}
+                                  <p class="note form-success">{{ 'general.newsletter_form.confirmation' | t }}</p>
+                
+                                {% endif %}
+                              {% endform %}
+                        {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+            <div class="grid-uniform footer-links">
+                <div class="grid-item small--one-half medium--one-half large--one-quarter small--one-half medium--one-half large--one-quarter">
+                    <h3>Policies</h3>
+                    <ul>
+                        <li>
+                            <a href="/pages/shipping-policy" class="page-link shipping-policy" title="Shipping Policy">Shipping Policy</a>
+                        </li>
+                        <li>
+                            <a href="/pages/return-policy" class="page-link return-policy" title="Return Policy">Return Policy</a>
+                        </li>
+                        <li>
+                            <a href="/pages/terms-conditions" class="page-link terms-conditions" title="Terms &amp; Conditions">Terms &amp; Conditions</a>
+                        </li>
+                        <li>
+                            <a href="/pages/customer-service" class="page-link vendor-application" title="Customer Service">Customer Service</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="grid-item small--one-half medium--one-half large--one-quarter">
+                    <h3>Customer Service</h3>
+                    <ul>
+                        <li><a href="/pages/faq" title="FAQ">FAQ</a>
+                        </li>
+                        <li><a href="/pages/contact-us" title="Contact Us">Contact Us</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="grid-item small--one-half medium--one-half large--one-quarter">
+                    <h3>Our Company</h3>
+                    <ul>
+                        <li>
+                            <a href="/pages/about-us
+" title="About Us">About Us</a>
+                        </li>
+                        <li>
+                            <a href="/pages/privacy-policy" title="Privacy Policy">Privacy Policy</a>
+                        </li>
+                        <li>
+                            <a href="/pages/testimonials" title="Testimonials">Testimonials</a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <div class="grid-item medium--one-half large--one-quarter small--text-center fourth-section">
+                    <div class="payment-methods">
+                        <h3>Payment Methods</h3>
+                        <div>
+                            <span class="footer-sprite cc-visa"></span>
+                            <span class="footer-sprite cc-mastercard"></span>
+                            <span class="footer-sprite cc-amex"></span>
+                            <span class="footer-sprite cc-discover"></span>
+                           <!-- <span class="footer-sprite cc-bitcoin"></span> -->
+                        </div>
+                    </div>
+                    <div class="crypto-security">
+                        <!--<h3>We Accept Crypto!</h3>
+                        <div class="crypto-payment">
+                            <a href="#">
+                                <span class="footer-sprite pay-with-bitcoin"></span>
+                                <span>Easily pay with Bitcoin.</span>
+                            </a>
+                        </div> -->
+                        <div class="security">
+                            <span class="footer-sprite authorizenet"></span>
+                            <!--<span class="footer-sprite verisign"></span> -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="grid sub-footer">
+                <div class="age-warning">
+                    <span>All prices are in USD.</span>
+                    <span>Our products are intended for tobacco or legal use only.</span>
+                    <span>You must be 21 years or older to browse this website and purchase products.</span>
+                </div>
+                <div class="copyright">
+                    &copy; <span>2017</span><span>Pink Flamingo</span> |
+                    <a href="#" title="">Sitemap</a> |
+                    <a href="#" title="">XML Sitemap</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- //site-footer -->
+  </div>
+  <script id="modalTemplate" type="text/template">
+  
+    <div id="ajaxifyModal" class="ajaxify-modal">
+      <div id="ajaxifyCart" class="ajaxifyCart--content"></div>
+    </div>
+  
+  </script>
+  
+  {{ 'js28.js' | asset_url | script_tag }}
+  {{ 'js29.js' | asset_url | script_tag }}
+  {{ 'productPage.js' | asset_url | script_tag }}
+  {{ 'slick.min.js' | asset_url | script_tag }}
+  {{ 'fastclick.min.js' | asset_url | script_tag }}
+  {{ 'timber.js' | asset_url | script_tag }}
+
+  {% comment %}
+    Template-specific js
+  {% endcomment %}
+  <script>
+    {% if resetPassword %}
+      $(function() {
+        timber.resetPasswordSuccess();
+      });
+    {% endif %}
+  </script>
+
+  {% comment %}
+    Ajaxify your cart with this plugin.
+    Documentation:
+      - http://shopify.com/timber#ajax-cart
+  {% endcomment %}
+  
+
+  
+  
+  
+  {% if settings.ajax_cart_method == "drawer" %}
+    {{ 'handlebars.min.js' | asset_url | script_tag }}
+    {% include 'ajax-cart-template' %}
+    {{ 'ajax-cart.js' | asset_url | script_tag }}
+
+    <script>
+      jQuery(function($) {
+        ajaxCart.init({
+          formSelector: '#AddToCartForm',
+          cartContainer: '#CartContainer',
+          addToCartSelector: '#AddToCart',
+          cartCountSelector: '#CartCount',
+          cartCostSelector: '#CartCost',
+          moneyFormat: {{ shop.money_format | json }}
+        });
+      });
+
+      jQuery(document.body).on('afterCartLoad.ajaxCart', function(evt, cart) {
+        // Bind to 'afterCartLoad.ajaxCart' to run any javascript after the cart has loaded in the DOM
+        timber.RightDrawer.open();
+      });
+    </script>
+  {% endif %}
+  <script>
+    $('#collectionFilters > .sidebar-inner').slimScroll({
+          height: '400px'
+      });
+    //setTimeout(function(){ 
+      //debugger;
+      //$('iframe').contents().find('a.powered').hide(); 
+    //}, 10000);
+    $('body').on('DOMNodeInserted ', 'iframe', function(){
+      
+      setTimeout(function(){ 
+      
+        $('iframe').contents().find('a.powered').hide(); 
+      }, 1000);
+    });
+
+    
+    // product slider initialize
+    $(window).load(function() {
+      
+        $("#flexiselDemo1").flexisel({
+            visibleItems: 6,
+            itemsToScroll: 6,
+            infinite: false,
+            autoPlay: {
+                enable: false,
+                interval: 5000,
+                pauseOnHover: true
+            }  ,
+            responsiveBreakpoints: { 
+              portrait: { 
+                changePoint:480,
+                visibleItems: 1,
+                itemsToScroll: 1
+              }, 
+                landscape: { 
+                changePoint:640,
+                visibleItems: 2,
+                itemsToScroll: 2
+              },
+                tablet: { 
+                changePoint:768,
+                visibleItems: 3,
+                itemsToScroll: 3
+              }
+            }      
+        });
+
+        $("#flexiselDemo2").flexisel({
+            visibleItems: 6,
+            itemsToScroll: 6,
+            infinite: false,        
+            autoPlay: {
+                enable: false,
+                interval: 5000,
+                pauseOnHover: true
+            }        
+        });
+
+        $("#flexiselDemo3").flexisel({
+            visibleItems: 6,
+            itemsToScroll: 6,
+            infinite: false,         
+            autoPlay: {
+                enable: false,
+                interval: 5000,
+                pauseOnHover: true
+            }        
+        });
+      
+    });
+  </script>
+  <!--slider -->
+  {{ 'jssor.slider.min.js' | asset_url | script_tag }}
+  {{ 'jssorslider2.js' | asset_url | script_tag }}
+  <!-- slider -->
+  <script>
+    jssor_1_slider_init();
+  </script>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-59323b46110f3ce8"></script>
+</body>
+</html>

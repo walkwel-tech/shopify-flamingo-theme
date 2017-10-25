@@ -1,0 +1,44 @@
+<nav class="nav-bar medium-down--hide innerproductpage" id="header-nav" style="background: #fff;">
+        <div class="wrapper">
+            <ul class="site-nav" id="accessibleNav">
+                <li class="site-nav--has-dropdown site-nav--top-level" aria-haspopup="true">
+                 <a style="color: #333;" href="/pages/shipping-policy" title="Free USA Shipping">
+                                    <img src="{{ 'plane_icon_black.png' | asset_url }}" width="15px" />
+                                    Free USA Shipping</a>
+
+                </li>
+                <li class="site-nav--has-dropdown site-nav--top-level" aria-haspopup="true">
+                            <a style="color: #333;" href="tel:18443265786" class="phone-number">
+                            <img src="{{ 'phone_icon_black.png' | asset_url }}" width="15px" />
+                        1-734-757-4911</a>
+                </li>
+                <li></li>
+              <li class="site-nav--has-dropdown site-nav--top-level" aria-haspopup="true">
+
+                    <a style="color: #333;" href="#">
+                        <img src="{{ 'chat_icon_black.png' | asset_url }}" width="15px" />
+                        Live Chat 
+                    </a>
+         </li>
+                <li class="site-nav--has-dropdown site-nav--top-level" aria-haspopup="true">
+                    <a style="color: #333;" href="/pages/glass-guarantee-program" title="Glass Guarantee Program">
+                    <img src="{{ 'G_icon_black.png' | asset_url }}" width="15px" />
+                    Glass Guarantee Program</a>
+
+                </li>
+
+            </ul>
+        </div>
+    </nav>
+
+<header class="header">
+        <input class="menu-btn" type="checkbox" id="menu-btn" />
+        <label class="menu-icon" for="menu-btn"><span class="navicon"></span></label>
+        <ul class="menu">
+          {% for collection in collections %}
+          	{% if collection.image %}
+            <li><a href="{{ collection.url }}">{{ collection.title }}</a></li>
+          	{% endif %}
+          {% endfor %}
+        </ul>
+</header>

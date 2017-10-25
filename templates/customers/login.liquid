@@ -1,0 +1,281 @@
+<!-- /templates/customers/login.liquid -->
+
+{% include 'infonavbar' %}
+<div class="wrapper main-content input-screens">
+      <!--<div class="row">
+      <div class="col-md-6 col-md-offset-3">
+        <div class="panel panel-login">
+          
+          <div class="panel-body">
+            <div class="row">
+              <div class="col-lg-12">
+                <div id="login-form" style="display: block;">
+
+                <h2 style="text-align: center;">Login with your email</h2>
+                {% form 'customer_login' %}
+
+                {{ form.errors | default_errors }}
+
+                  <div class="form-group">
+                    <input type="text" name="customer[email]" id="email" class="form-control" placeholder="E-mail" value="">
+                  </div>
+                  <div class="form-group">
+                    <input type="password" name="customer[password]" id="password" class="form-control" placeholder="Password">
+                  </div>
+                  <div class="form-group text-center">
+                    <input type="checkbox" tabindex="3" class="" name="remember" id="remember">
+                    <label for="remember"> Remember Me</label>
+                  </div>
+                  <div class="form-group">
+                    <div class="row">
+                      <div class="col-sm-6 col-sm-offset-3">
+                        <input type="submit" name="login-submit" id="login-submit" tabindex="4" class="form-control btn btn-login" value="Log In">
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <div class="row">
+                      <div class="col-lg-12">
+                        <div class="text-center">
+                          <a href="#" tabindex="5" id="forgot-link" class="forgot-password">Forgot Password?</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                {% endform %}
+                </div>
+                <div id="forgot-form" style="display: none; text-align: center;">
+
+                  <h2>{{ 'customer.recover_password.title' | t }}</h2>
+                  <p>{{ 'customer.recover_password.subtext' | t }}</p>
+
+                  <div class="form-vertical">
+                    {% form 'recover_customer_password' %}
+
+                      {{ form.errors | default_errors }}
+
+                      {% comment %}
+                        Assign variable to be used after timber.init() is run in theme.liquid
+                      {% endcomment %}
+                      {% if form.posted_successfully? %}
+                        {% assign resetPassword = true %}
+                      {% endif %}
+
+                      <label for="RecoverEmail" class="hidden-label">{{ 'customer.recover_password.email' | t }}</label>
+                      <input type="email" value="" name="email" id="RecoverEmail" class="input-full" placeholder="{{ 'customer.recover_password.email' | t }}" autocorrect="off" autocapitalize="off">
+
+                      <p>
+                        <input type="submit" class="form-control btn btn-login" value="{{ 'customer.recover_password.submit' | t }}">
+                      </p>
+                      <button type="button" id="cancel-forgot" class="text-link">{{ 'customer.recover_password.cancel' | t }}</button>
+                    {% endform %}
+                  </div>
+
+                </div>
+                <div id="register-form" style="display: none;">
+
+                {% form 'create_customer' %}
+
+                {{ form.errors | default_errors }}
+
+                  <div class="form-group">
+                    <input type="text" name="customer[first_name]" id="firstname" class="form-control" placeholder="First Name" value="">
+                  </div>
+                  <div class="form-group">
+                    <input type="text" name="customer[last_name]" id="lastname" class="form-control" placeholder="Last Name" value="">
+                  </div>
+                  <div class="form-group">
+                    <input type="email" name="customer[email]" id="email" class="form-control" placeholder="Email Address" value="">
+                  </div>
+                  <div class="form-group">
+                    <input type="password" name="customer[password]" id="password" tabindex="2" class="form-control" placeholder="Password">
+                  </div>
+                  <div class="form-group">
+                    <div class="row">
+                      <div class="col-sm-6 col-sm-offset-3">
+                        <input type="submit" name="register-submit" id="register-submit" tabindex="4" class="form-control btn btn-register" value="Register Now">
+                      </div>
+                    </div>
+                  </div>
+
+                {% endform %}
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>-->
+
+
+
+
+
+  
+
+
+
+<div class="grid">
+
+  <div class="grid__item large--one-third push--large--one-third text-center">
+
+    {% comment %}
+      If a user has successfully requested a new password, the form.posted_successfully? variable
+      is set to true within the 'recover_customer_password' form only. Within that form you'll see
+      the variable 'resetPassword' set to true, which is used to initialize timber.resetPasswordSuccess().
+    {% endcomment %}
+    <div class="note form-success" id="ResetSuccess" style="display:none;">
+      {{ 'customer.recover_password.success' | t }}
+    </div>
+
+    <div id="login-form" class="form-vertical">
+      {% form 'customer_login' %}
+
+        <h2>Login with your email</h2>
+
+        {{ form.errors | default_errors }}
+
+        <label for="CustomerEmail" class="hidden-label">{{ 'customer.login.email' | t }}</label>
+        <input type="email" name="customer[email]" id="CustomerEmail" class="input-full{% if form.errors contains 'email' %} error{% endif %}" placeholder="{{ 'customer.login.email' | t }}" autocorrect="off" autocapitalize="off" autofocus>
+
+        {% if form.password_needed %}
+          <label for="CustomerPassword" class="hidden-label">{{ 'customer.login.password' | t }}</label>
+          <input type="password" value="" name="customer[password]" id="CustomerPassword" class="input-full{% if form.errors contains 'password' %} error{% endif %}" placeholder="{{ 'customer.login.password' | t }}">
+        {% endif %}
+
+        <p>
+          <input type="submit" class="btn btn--full" value="{{ 'customer.login.sign_in' | t }}">
+        </p>
+        <!--<p><a href="/">{{ 'customer.login.cancel' | t }}</a></p>
+        <p>{{ 'layout.customer.create_account' | t | customer_register_link }}</p>-->
+        {% if form.password_needed %}
+          <p><a href="#recover" id="forgot-link">{{ 'customer.login.forgot_password' | t }}</a></p>
+        {% endif %}
+
+      {% endform %}
+    </div>
+
+    {% comment %}
+      JS shows/hides this form in timber.loginForms()
+    {% endcomment %}
+    <div id="forgot-form" style="display: none;">
+
+      <h2>{{ 'customer.recover_password.title' | t }}</h2>
+      <p>{{ 'customer.recover_password.subtext' | t }}</p>
+
+      <div class="form-vertical">
+        {% form 'recover_customer_password' %}
+
+          {{ form.errors | default_errors }}
+
+          {% comment %}
+            Assign variable to be used after timber.init() is run in theme.liquid
+          {% endcomment %}
+          {% if form.posted_successfully? %}
+            {% assign resetPassword = true %}
+          {% endif %}
+
+          <label for="RecoverEmail" class="hidden-label">{{ 'customer.recover_password.email' | t }}</label>
+          <input type="email" value="" name="email" id="RecoverEmail" class="input-full" placeholder="{{ 'customer.recover_password.email' | t }}" autocorrect="off" autocapitalize="off">
+
+          <p>
+            <input type="submit" class="btn btn--full" value="{{ 'customer.recover_password.submit' | t }}">
+          </p>
+          <button type="button" id="cancel-forgot" class="text-link">{{ 'customer.recover_password.cancel' | t }}</button>
+        {% endform %}
+      </div>
+
+    </div>
+
+    {% comment %}
+      If accounts are set as optional, the following will be shown as an option
+      during checkout, not on the default /login page.
+    {% endcomment %}
+    {% if shop.checkout.guest_login %}
+      <hr>
+
+      <h2>{{ 'customer.login.guest_title' | t }}</h2>
+
+      {% form 'guest_login' %}
+        <input type="submit" class="btn" value="{{ 'customer.login.guest_continue' | t }}">
+      {% endform %}
+    {% endif %}
+
+  </div>
+
+</div>
+
+  </div>
+
+  <script type="text/javascript">
+  $(function() {
+
+    $('#login-form-link').click(function(e) {
+    $("#login-form").delay(100).fadeIn(100);
+    $("#register-form").fadeOut(100);
+    $('#register-form-link').removeClass('active');
+    $(this).addClass('active');
+    e.preventDefault();
+  });
+  $('#register-form-link').click(function(e) {
+    $("#register-form").delay(100).fadeIn(100);
+    $("#login-form").fadeOut(100);
+    $('#login-form-link').removeClass('active');
+    $(this).addClass('active');
+    e.preventDefault();
+  });
+  $('#forgot-link').click(function(e) {
+    e.preventDefault();
+    $("#login-form").fadeOut(100);
+    $("#forgot-form").fadeIn(100);
+  });
+  $('#cancel-forgot').click(function(e) {
+    e.preventDefault();
+    $("#login-form").fadeIn(100);
+    $("#forgot-form").fadeOut(100);
+  });
+    
+    $('#customer_login').validate({
+  rules: {
+     
+     "customer[email]": {
+         required: true,
+         email: true
+     },
+     "customer[password]": {
+         required: true
+     }
+  }
+      
+});
+    $("form[action='/account/recover']").validate({
+  rules: {
+     
+     "email": {
+         required: true,
+         email: true
+     }
+   }
+    });
+});
+function getLocation(href) {
+    var match = href.match(/^(https?\:)\/\/(([^:\/?#]*)(?:\:([0-9]+))?)([\/]{0,1}[^?#]*)(\?[^#]*|)(#.*|)$/);
+    return match && {
+        href: href,
+        protocol: match[1],
+        host: match[2],
+        hostname: match[3],
+        port: match[4],
+        pathname: match[5],
+        search: match[6],
+        hash: match[7]
+    }
+}
+    
+    if(window.location.hash) {
+    	$("#login-form").hide();
+    	$("#forgot-form").show();
+    }
+  
+</script>

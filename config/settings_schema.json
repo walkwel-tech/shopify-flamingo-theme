@@ -1,0 +1,240 @@
+[
+  {
+    "name": "theme_info",
+    "logo": "https:\/\/cdn.shopify.com\/s\/files\/1\/0070\/7032\/files\/2010_6_23_Shopify-Green_256x256.jpg",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Pink Flamingo Theme Development"
+      },
+      {
+        "type": "paragraph",
+        "content": "v1.0.0"
+      },
+      {
+        "type": "paragraph",
+        "content": "Theme settings allow designers to provide an easy way for any user to customize the look and feel of their shop without having to delve into HTML or CSS code. Please see our [help page on theme settings](http:\/\/docs.shopify.com\/themes\/theme-templates\/settings) to learn more about how you can make the theme customizable."
+      },
+      {
+        "type": "paragraph",
+        "content": "Review [Timber's documentation](http:\/\/shopify.github.io\/Timber\/) for any development help."
+      }
+    ]
+  },
+  {
+    "name": "Header",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Logo"
+      },
+      {
+        "type": "checkbox",
+        "id": "logo_use_image",
+        "label": "Use custom logo"
+      },
+      {
+        "type": "image",
+        "id": "logo.png",
+        "label": "Custom logo",
+        "max-width": 450,
+        "max-height": 200,
+        "info": "450 x 200px .png"
+      },
+      {
+        "type": "text",
+        "id": "logo_max_width",
+        "label": "Max logo width",
+        "default": "450",
+        "info": "Defined in pixels. Do not add the 'px' unit."
+      },
+      {
+        "type": "header",
+        "content": "Favicon"
+      },
+      {
+        "type": "checkbox",
+        "id": "favicon_enable",
+        "label": "Use custom icon"
+      },
+      {
+        "type": "image",
+        "id": "favicon.png",
+        "label": "Icon",
+        "max-width": 32,
+        "max-height": 32,
+        "info": "32 x 32px .png required"
+      }
+    ]
+  },
+  {
+    "name": "Banner Images",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Banner Images"
+      },
+      {
+        "type": "checkbox",
+        "id": "banner_enable1",
+        "label": "Enable Banner 1"
+      },
+      {
+        "type": "image",
+        "id": "banner1.png",
+        "label": "Custom Banner 1",
+        "max-width": 1500,
+        "max-height": 600,
+        "info": "max size: 1500 x 600px .png"
+      },
+      {
+        "type": "checkbox",
+        "id": "banner_enable2",
+        "label": "Enable Banner 2"
+      },
+      {
+        "type": "image",
+        "id": "banner2.png",
+        "label": "Custom Banner 2",
+        "max-width": 1500,
+        "max-height": 600,
+        "info": "max size: 1500 x 600px .png"
+      },
+      {
+        "type": "checkbox",
+        "id": "banner_enable3",
+        "label": "Enable Banner 3"
+      },
+      {
+        "type": "image",
+        "id": "banner3.png",
+        "label": "Custom Banner 3",
+        "max-width": 1500,
+        "max-height": 600,
+        "info": "max size: 1500 x 600px .png"
+      }
+    ]
+  },
+  {
+    "name": "Welcome Section",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "welcome_enable",
+        "label": "Show Welcome Section"
+      },
+      {
+        "type": "textarea",
+        "id": "welcome_textarea",
+        "label": "Welcome Section Text"
+      }
+    ]
+  },
+  {
+    "name": "Product Videos Section",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "product_videos_enable",
+        "label": "Show Product Videos Section"
+      },
+      {
+        "type": "header",
+        "content": "Product Videos Section"
+      },
+      {
+        "type": "text",
+        "id": "latest_video_name1",
+        "label": "Video Name -1"
+      },
+      {
+        "type": "text",
+        "id": "latest_video1",
+        "label": "Video Code -1"
+      },
+      {
+        "type": "text",
+        "id": "latest_video_name2",
+        "label": "Video Name -2"
+      },
+      {
+        "type": "text",
+        "id": "latest_video2",
+        "label": "Video Code -2"
+      },
+      {
+        "type": "text",
+        "id": "latest_video_name3",
+        "label": "Video Name -3"
+      },
+      {
+        "type": "text",
+        "id": "latest_video3",
+        "label": "Video Code -3"
+      }
+    ]
+  },
+  {
+    "name": "Footer",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "footer_newsletter_enable",
+        "label": "Show newsletter field"
+      },
+      {
+        "type": "text",
+        "id": "newsletter_form_action",
+        "label": "MailChimp form action URL",
+        "info": "[Where do I find my MailChimp form action URL?](http:\/\/docs.shopify.com\/support\/configuration\/store-customization\/where-do-i-get-my-mailchimp-form-action)"
+      }
+    ]
+  },
+  {
+    "name": "Cart page",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "cart_notes_enable",
+        "label": "Enable cart notes"
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_vendor_enable",
+        "label": "Show product vendor"
+      },
+      {
+        "type": "select",
+        "id": "ajax_cart_method",
+        "label": "Cart type",
+        "options": [
+          {
+            "value": "drawer",
+            "label": "Drawer"
+          },
+          {
+            "value": "page",
+            "label": "Page"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Social media",
+    "settings": [
+      {
+        "type": "text",
+        "id": "social_twitter_link",
+        "label": "Twitter URL",
+        "info": "https:\/\/twitter.com\/shopify"
+      },
+      {
+        "type": "text",
+        "id": "social_facebook_link",
+        "label": "Facebook URL",
+        "info": "https:\/\/www.facebook.com\/shopify"
+      }
+    ]
+  }
+]

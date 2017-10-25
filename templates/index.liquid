@@ -1,0 +1,477 @@
+<!-- /templates/index.liquid -->
+{% comment %}
+
+  This is the homepage of your site.
+
+  More info on global variables (available on all templates):
+    - http://docs.shopify.com/themes/liquid-variables/global
+{% endcomment %}
+  <!-- slider -->
+  <div id="jssor_1" style="position:relative;margin:0 auto;top:0px;left:0px;width:1300px;height:377px;overflow:hidden;visibility:hidden;">
+        <!-- Loading Screen 
+        <div data-u="loading" class="jssorl-oval" style="position:absolute;top:0px;left:0px;text-align:center;background-color:rgba(0,0,0,0.7);">
+            <img style="margin-top:-19.0px;position:relative;top:50%;width:38px;height:38px;" src="img/loading/static-svg/oval.svg" />
+        </div>-->
+        <div data-u="slides" class="slider_container_mainimg" style="cursor:default;position:relative;top:0px;left:0px;width:1300px;height:377px;overflow:hidden;">
+          {% if settings.banner_enable1 %}
+            <div>
+                <img data-u="image" src="{{ 'banner1.png' | asset_url }}" />
+                <div class="bannertextmobile">
+                    <div class="bannermain_hd">Welcome</div>
+                    <div class="bannerparatext">Pink flamingo glass is an online glass shop based in beautiful ann arbor, michigan- the birthplace of hash bash. at pink flamingo, you can expect to find the awesomest selection of glass from all across the globe. we select each and every product carefully so that you have access to not only amazing artists but good affordable glass as well. enjoy & be mary!</div>
+                </div>
+            </div>
+          {% endif %}
+          {% if settings.banner_enable2 %}
+            <div class="mainslider_pink">
+                <img data-u="image" src="{{ 'banner2.png' | asset_url }}" />
+                <div class="bannertextmobile">
+                    <div class="bannermain_hd">Welcome</div>
+                    <div class="bannerparatext">Pink flamingo glass is an online glass shop based in beautiful ann arbor, michigan- the birthplace of hash bash. at pink flamingo, you can expect to find the awesomest selection of glass from all across the globe. we select each and every product carefully so that you have access to not only amazing artists but good affordable glass as well. enjoy & be mary!</div>
+                </div>
+            </div>
+          {% endif %}
+          {% if settings.banner_enable3 %}
+            <div>
+                <img data-u="image" src="{{ 'banner3.png' | asset_url }}" />
+                <div class="bannertextmobile">
+                    <div class="bannermain_hd">Welcome</div>
+                    <div class="bannerparatext">Pink flamingo glass is an online glass shop based in beautiful ann arbor, michigan- the birthplace of hash bash. at pink flamingo, you can expect to find the awesomest selection of glass from all across the globe. we select each and every product carefully so that you have access to not only amazing artists but good affordable glass as well. enjoy & be mary!</div>
+                </div>
+            </div>
+          {% endif %}
+        </div>
+        
+        <!-- Bullet Navigator -->
+        <div data-u="navigator" class="jssorb05" style="bottom:16px;right:16px;" data-autocenter="1">
+            <!-- bullet navigator item prototype -->
+            <div data-u="prototype" style="width:16px;height:16px;"></div>
+        </div>
+        <!-- Arrow Navigator -->
+        <span data-u="arrowleft" class="jssora22l" style="top:0px;left:8px;width:40px;height:58px;" data-autocenter="2"></span>
+        <span data-u="arrowright" class="jssora22r" style="top:0px;right:8px;width:40px;height:58px;" data-autocenter="2"></span>
+        
+        <div class="bannertext">
+            <div class="bannermain_hd">Welcome</div>
+            <div class="bannerparatext">Pink flamingo glass is an online glass shop based in beautiful ann arbor, michigan- the birthplace of hash bash. at pink flamingo, you can expect to find the awesomest selection of glass from all across the globe. we select each and every product carefully so that you have access to not only amazing artists but good affordable glass as well. enjoy & be mary!</div>
+        </div>
+    </div>
+    
+  <!-- slider -->
+   <!-- <div id="heroSlider">
+        <ul class="slick-initialized slick-slider">
+            <div aria-live="polite" class="slick-list draggable">
+                <div class="slick-track" style="opacity: 1; width: 100%; transform: translate3d(0px, 0px, 0px);" role="listbox">
+
+                    <li class="slick-slide slick-current slick-active" data-slick-index="0" aria-hidden="false" style="width: 100%;" role="option" aria-describedby="slick-slide00">
+                        <a href="#" class="slide-link" title="420 Sale 2017" tabindex="0">
+                            <div class="imod ar--16x7">
+                                <img class=" lazyloaded main--banner_image" src="{{ 'banner1.png' | asset_url }}" >
+                                <div class="slick_slider_text_box_banner">
+                                    <h1>welcome:)</h1>
+                                    <p>Pink flamingo glass is an online glass shop based in beautiful ann arbor, michigan- the birthplace of hash bash. at pink flamingo, you can expect to find the awesomest selection of glass from all across the globe. we select each and every product carefully so that you have access to not only amazing artists but good affordable glass as well. enjoy & be mary!</p>
+                                </div>
+
+                            </div>
+                        </a>
+                    </li>
+
+                    <li class="slick-slide" data-slick-index="1" aria-hidden="true" style="width: 100%;" role="option" aria-describedby="slick-slide01">
+                        <a href="#" class="slide-link" title="">
+                          <div class="imod ar--16x7">
+                              <img class=" lazyloaded main--banner_image" src="{{ 'banner2.png' | asset_url }}" width="320" height="100">
+                          </div>
+                        </a>
+                    </li>
+
+                    <li class="slick-slide" data-slick-index="2" aria-hidden="true" style="width: 100%;" role="option" aria-describedby="slick-slide02">
+                        <a href="#" class="slide-link" title="">
+                          <div class="imod ar--16x7">
+                              <img class=" lazyloaded main--banner_image" src="{{ 'banner3.png' | asset_url }}" width="320" height="100">
+                          </div>
+                        </a>
+                    </li>
+
+                </div>
+            </div>
+        </ul>
+    </div> -->
+    <div>
+   <!-- {% section 'slideshow' %} -->
+    </div>
+    <nav class="nav-bar medium-down--hide home-nav" id="header-nav">
+        <div class="wrapper">
+            <ul class="site-nav" id="accessibleNav">
+                <li class="site-nav--has-dropdown site-nav--top-level" aria-haspopup="true">
+                    <a href="/pages/shipping-policy" title="Free USA Shipping">
+                    <img src="{{ 'plane_icon.png' | asset_url }}" width="15px" />
+                    Free USA Shipping</a>
+                </li>
+                <li class="site-nav--has-dropdown site-nav--top-level" aria-haspopup="true">
+                   
+                        <a href="tel:18443265786" class="phone-number">
+                        <img src="{{ 'phone_icon.png' | asset_url }}" width="15px" />
+                        1-734-757-4911</a>                    
+                </li>
+                <li class="site-nav--has-dropdown site-nav--top-level" aria-haspopup="true">
+                
+                  <a href="#">
+                    <img src="{{ 'chat_icon.png' | asset_url }}" width="15px" />
+                    Live Chat 
+                   </a>
+                
+                 
+                </li>
+                <li class="site-nav--has-dropdown site-nav--top-level" aria-haspopup="true">
+                    <a href="/pages/glass-guarantee-program" title="Glass Guarantee Program">
+                    <img src="{{ 'G_icon.png' | asset_url }}" width="15px" />
+                    Glass Guarantee Program</a>
+                  <div class="clear"></div> 
+                </li>
+                
+                
+            </ul>
+        </div>
+    </nav>
+
+    
+
+    <main class="wrapper main-content products_img_text" role="main">
+                <div class="section-header">
+                    <h2 class="dab--rigs_heading">      
+                      <span>Shop by category</span>
+                    </h2>
+                </div>
+        <section class="glass-guarantee-program site-nav--has-dropdown site-nav--top-level">
+            <ul class="site-nav--dropdown">
+           
+            {% assign dabrigs = collections['dab-rigs-water-pipes'] %}
+                <li>
+                    <a href="{{ dabrigs.url }}" title="">
+                        <div class="nav-item-image">
+                            <div class="imod ar--4x5">
+                            {% if dabrigs.image %}
+                              {{ dabrigs.image.src | img_url: '80x80' | img_tag: collection_title }}
+                            {% else %}
+                              {{ dabrigs.products.first.featured_image | img_url: '80x80' | img_tag: collection_title }}
+                            {% endif %}
+                                
+                            </div>
+                        </div>{{ dabrigs.title }}</a>
+                </li>
+
+            {% assign headyamerican = collections['heady-american-glass'] %}
+                <li>
+                    <a href="{{ headyamerican.url }}" title="">
+                        <div class="nav-item-image">
+                            <div class="imod ar--4x5">
+                            {% if headyamerican.image %}
+                              {{ headyamerican.image.src | img_url: '80x80' | img_tag: collection_title }}
+                            {% else %}
+                              {{ headyamerican.products.first.featured_image | img_url: '80x80' | img_tag: collection_title }}
+                            {% endif %}
+                                
+                            </div>
+                        </div>{{ headyamerican.title }}</a>
+                </li>
+            {% assign liveauctions = collections['live-auctions'] %}
+                <li>
+                    <a href="{{ liveauctions.url }}" title="">
+                        <div class="nav-item-image">
+                            <div class="imod ar--4x5">
+                            {% if liveauctions.image %}
+                              {{ liveauctions.image.src | img_url: '80x80' | img_tag: collection_title }}
+                            {% else %}
+                              {{ liveauctions.products.first.featured_image | img_url: '80x80' | img_tag: collection_title }}
+                            {% endif %}
+                                
+                            </div>
+                        </div>{{ liveauctions.title }}</a>
+                </li>
+            {% assign glassunder50 = collections['glass-under-100'] %}
+                <li>
+                    <a href="{{ glassunder50.url }}" title="">
+                        <div class="nav-item-image">
+                            <div class="imod ar--4x5">
+                            {% if glassunder50.image %}
+                              {{ glassunder50.image.src | img_url: '80x80' | img_tag: collection_title }}
+                            {% else %}
+                              {{ glassunder50.products.first.featured_image | img_url: '80x80' | img_tag: collection_title }}
+                            {% endif %}
+                                
+                            </div>
+                        </div>{{ glassunder50.title }}</a>
+                </li>
+
+            {% assign handmade = collections['glass-pipes'] %}
+                <li>
+                    <a href="{{ handmade.url }}" title="">
+                        <div class="nav-item-image">
+                            <div class="imod ar--4x5">
+                            {% if handmade.image %}
+                              {{ handmade.image.src | img_url: '80x80' | img_tag: collection_title }}
+                            {% else %}
+                              {{ handmade.products.first.featured_image | img_url: '80x80' | img_tag: collection_title }}
+                            {% endif %}
+                                
+                            </div>
+                        </div>{{ handmade.title }}</a>
+                </li>
+
+            {% assign pendents = collections['pendants'] %}
+                <li>
+                    <a href="{{ pendents.url }}" title="">
+                        <div class="nav-item-image">
+                            <div class="imod ar--4x5">
+                            {% if pendents.image %}
+                              {{ pendents.image.src | img_url: '80x80' | img_tag: collection_title }}
+                            {% else %}
+                              {{ pendents.products.first.featured_image | img_url: '80x80' | img_tag: collection_title }}
+                            {% endif %}
+                                
+                            </div>
+                        </div>{{ pendents.title }}</a>
+                </li>
+
+            {% assign dabtools = collections['dab-tools'] %}
+                <li>
+                    <a href="{{ dabtools.url }}" title="">
+                        <div class="nav-item-image">
+                            <div class="imod ar--4x5">
+                            {% if dabtools.image %}
+                              {{ dabtools.image.src | img_url: '80x80' | img_tag: collection_title }}
+                            {% else %}
+                              {{ dabtools.products.first.featured_image | img_url: '80x80' | img_tag: collection_title }}
+                            {% endif %}
+                                
+                            </div>
+                        </div>{{ dabtools.title }}</a>
+                </li>
+
+
+                
+            </ul>
+        </section>
+
+        {% assign liveAucObj = collections['live-auctions'] %}
+        {% if liveAucObj.all_products_count > 0 %}
+        
+        <section class="recently-added-products section">
+            <div class="section--inner">
+                <div class="section-header">
+                    <h2 class="dab--rigs_heading">               
+                      <span><img src="{{ liveAucObj.image | img_url: 'large' }}" /></span>
+                      <span>{{ liveAucObj.title }}</span>
+                    </h2>
+                </div>
+                <ul id="flexiselDemo1">
+                    {% for product in collections.live-auctions.products limit: 8 %} 
+                        <li>
+                            <a href="{{ product.url }}" >
+                                <img width="120px" src="{{ product.featured_image | product_img_url: 'medium' }}" />
+                            </a>
+                            <div class="product-grid-item product-item small--one-third medium--one-fifth large--one-eighth no-swatches " style="float:left; width:100%;"> <br>
+                                <a class="pgi-bottom" href="{{ product.url }}" title="{{ product.title }}">
+                                    <span class="product-title">
+                                        <span class="product-brand">{{ product.vendor }}</span>
+                                        <span class="product-name">{{ product.title }}</span>
+                                    </span>
+                                    <div class="item-price ">
+                                        <span class="current-price">
+                                            <sup class="dollar">$</sup>{{ product.price | money_without_currency }}
+                                        </span>
+                                    </div>
+                                </a>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+                
+                <div class="section-footer">
+                    <a href="{{ liveAucObj.url }}" class="see-more-link" title="See all live auction products">See all live auction products</a>
+                </div>
+            </div>
+        </section>
+        {% endif %}
+
+        {% if settings.welcome_enable %}
+        <section class="welcome-to-dankstop section">
+            <div class="section--inner">
+                <div class="grid">
+                    <div class="welcome-title grid-item one-whole medium--two-fifths bottom__welcome--section large--two-fifths">
+                        <h2 class="">
+                                          Welcome to Pink Flamingo
+                                        </h2>
+                    </div>
+                    <div class="welcome-text grid-item one-whole bottom__welcome--section medium--three-fifths large--three-fifths">
+                        <p class="">
+                          {{ settings.welcome_textarea }}
+                            
+                        </p>
+                        <!--<a href="#" class="see-more-text-link" title="Find knowledge in our Dank Wiki Knowledge Base">
+                                          Learn More
+                                        </a>-->
+                    </div>
+                </div>
+            </div>
+        </section>
+        {% endif %}
+
+        {% assign dabrigObj = collections['dab-rigs-water-pipes'] %}
+        {% if dabrigObj.all_products_count > 0 %}
+        <section class="recently-added-products section">
+            <div class="section--inner">
+                <div class="section-header">
+                    <h2 class="dab--rigs_heading">               
+                      <span><img src="{{ dabrigObj.image | img_url: 'large' }}" /> </span>
+                      <span>dab rigs &amp;<br> water pipes</span>
+                    </h2>
+                </div>
+                    <ul id="flexiselDemo2">
+                      {% for product in collections.dab-rigs-water-pipes.products limit: 8 %} 
+
+                        <li>
+                            <a href="{{ product.url }}" >
+                                <img width="120px" src="{{ product.featured_image | product_img_url: 'medium' }}" />
+                            </a>
+                            <div class="product-grid-item product-item small--one-third medium--one-fifth large--one-eighth no-swatches " style="float:left; width:100%;"> <br>
+                                <a class="pgi-bottom" href="{{ product.url }}" title="{{ product.title }}">
+                                    <span class="product-title">
+                                        <span class="product-brand">{{ product.vendor }}</span>
+                                        <span class="product-name">{{ product.title }}</span>
+                                    </span>
+                                    <div class="item-price ">
+                                        <span class="current-price">
+                                            <sup class="dollar">$</sup>{{ product.price | money_without_currency }}
+                                        </span>
+                                    </div>
+                                </a>
+                            </div>
+                        </li>
+                    {% endfor %}
+                    </ul>
+                    <div class="section-footer">
+                        <a href="{{ dabrigObj.url }}" class="see-more-link" title="See all dab rigs & water pipes products">See all dab rigs & water pipes products</a>
+                    </div>
+            </div>
+        </section>
+        {% endif %}
+        
+
+        {% assign glassunderObj = collections['glass-under-100'] %}
+        {% if glassunderObj.all_products_count > 0 %}
+        <section class="recently-added-products section">
+            <div class="section--inner">
+                <div class="section-header">
+                    <h2 class="dab--rigs_heading">               
+                      <span><img src="{{ glassunderObj.image | img_url: 'large' }}" /></span>
+                      <span>{{ glassunderObj.title }}</span>
+                    </h2>
+                </div>
+                    <ul id="flexiselDemo3">
+                      {% for product in collections.glass-under-100.products limit: 8 %} 
+
+                        <li>
+                            <a href="{{ product.url }}" >
+                                <img width="120px" src="{{ product.featured_image | product_img_url: 'medium' }}" />
+                            </a>
+                            <div class="product-grid-item product-item small--one-third medium--one-fifth large--one-eighth no-swatches " style="float:left; width:100%;"> <br>
+                                <a class="pgi-bottom" href="{{ product.url }}" title="{{ product.title }}">
+                                    <span class="product-title">
+                                        <span class="product-brand">{{ product.vendor }}</span>
+                                        <span class="product-name">{{ product.title }}</span>
+                                    </span>
+                                    <div class="item-price ">
+                                        <span class="current-price">
+                                            <sup class="dollar">$</sup>{{ product.price | money_without_currency }}
+                                        </span>
+                                    </div>
+                                </a>
+                            </div>
+                        </li>
+                        {% endfor %}
+                        </ul>
+                    <div class="section-footer">
+                        <a href="{{ glassunderObj.url }}" class="see-more-link" title="See all glass under $50 products">See all glass under $50 products</a>
+                    </div>
+            </div>
+        </section>
+        {% endif %}
+        
+        
+
+        
+
+
+        <!-- <ul>
+            {% for vendor in collections.popular-brands.all_vendors %}
+              <li>{{ vendor }}</li>
+            {% endfor %}
+        </ul> -->
+        {% if settings.product_videos_enable %}
+        <section class="latest-product-videos section">
+            <div class="section--inner">
+                <div class="section-header">
+                    <h2 class="h1 text-center">Latest Product Videos</h2>
+                </div>
+                <div class="grid">
+                    <div class="product-video-1 grid-item small--one-whole medium--one-whole large--two-thirds">
+                        <div class="product-video-cont">
+                            <div class="yt-video video-wrapper" data-embed="{{ settings.latest_video1 }}">
+                                <div class="play-button"></div>
+                            </div>
+                        </div>
+                        <div class="video-product-container">
+                            <a href="#" title="Sprinkler to Triple Inset Massive Bong">
+                                {{ settings.latest_video_name1 }}
+                            </a>
+                        </div>
+                    </div>
+                    <div class="grid-item small--one-whole medium--one-whole large--one-third">
+                        <div class="grid">
+                            <div class="product-video-2 grid-item one-whole">
+                                <div class="product-video-cont">
+                                    <div class="yt-video video-wrapper" data-embed="{{ settings.latest_video2 }}">
+                                        <div class="play-button"></div>
+                                    </div>
+                                </div>
+                                <div class="video-product-container">
+                                    <a href="/products/dankstop-barrel-perc-to-swiss-perc-bong" title="Barrel Perc to Swiss Perc Bong">
+                    {{ settings.latest_video_name2 }}
+                  </a>
+                                </div>
+                            </div>
+                            <div class="product-video-3 grid-item one-whole">
+                                <div class="product-video-cont">
+                                    <div class="yt-video video-wrapper" data-embed="{{ settings.latest_video3 }}">
+
+                                    </div>
+                                    <div class="video-product-container">
+                                        <a href="/products/dankstop-barrel-perc-vortex-recycler" title="Barrel Perc Vortex Recycler">
+                      {{ settings.latest_video_name3 }}
+                    </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   
+                </div>
+                <div class="section-footer">
+                    <a href="https://www.youtube.com/playlist?list=PLxE_5CH3y8V6NDnz2mNRcCADgeizglvXN" class="see-more-link" title="See more of our videos on DankStop's YouTube channel">View more of our videos</a>
+                </div>
+        </section>
+        {% endif %}
+        
+        <section class="recently-added-products section"  style="padding-top:20px;">
+            <div class="section--inner">
+                <div class="section-header">
+                    <h2 class="dab--rigs_heading">               
+                      <span>Instagram Feed</span>
+                    </h2>
+                </div>
+                <div class="covet-pics-gallery" data-id="20430"></div>
+            </div>
+        </section>
+</main>
+

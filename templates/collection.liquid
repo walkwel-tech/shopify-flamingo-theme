@@ -1,0 +1,487 @@
+<!-- /templates/collection.liquid -->
+{% comment %}
+
+  For more information on collection tags:
+    - http://docs.shopify.com/themes/liquid-variables/collection
+
+{% endcomment %}
+
+{% include 'infonavbar' %}
+
+<main class="wrapper main-content">
+{% paginate collection.products by 12 %}
+
+{% include 'breadcrumb' %}
+
+        <header class="collection-header">
+            <div class="grid">
+                <div class="collection-image-container grid-item small--one-quarter medium--one-quarter large--one-fifth"><span class="hidden">collections/bong.jpg</span>
+                    <div class="imod ar--square main-prod-img"><img width="" height="" class="lazyloaded" src="{{ collection.image | img_url: 'medium' }}" />
+                        
+                    </div>
+                </div>
+                <div class="collection-title-container grid-item small--three-quarters medium--three-quarters large--four-fifths">
+                    <h1 class="collection-title">{{ collection.title }}</h1>
+                </div>
+                <div class="collection-description-container grid-item large--four-fifths">
+                    <div class="collection-description">
+                        <input type="checkbox" id="show_desc" class="hidden">
+                        <div class="collection-description--inner">
+                          {{ collection.description }}
+                          {% if collection.description != "" %}
+                          <label for="show_desc"><span>Show more</span><span>Show less</span></label>
+                          {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <div class="collection-content grid grid-border">
+    <aside class="sidebar grid-item large--one-fifth collection-filters sidebar-loaded" id="collectionFilters">
+        <div class="sidebar-inner">
+            <button id="closeFiltersBtn" class="modal-close-btn filters-close-btn" aria-label="close">
+                <svg width="100%" height="100%">
+                    <use xlink:href="#closeBtnX" xmlns:xlink="http://www.w3.org/1999/xlink"></use>
+                </svg>
+            </button>
+            <h2 class="sidebar-header">Filter</h2>
+
+            <div class="sidebar-section">
+                <input class="ss--state hidden" checked="" id="f-state--type" type="checkbox">
+                <label class="ss--btn" for="f-state--type" title="type">
+                    <h3>type</h3>
+                </label>
+                <ul class="ss--inner advanced-filters">
+                  {% for product_type in shop.types %}
+                  {% if product_type == '' or product_type == 'addon' or product_type == 'addon_product'  %}
+                  
+                  {% else %}
+                      <li class="a-filter li-type-filter" data-handle="type_{{ product_type  | handle }}" data-group="type">
+                        <a href="{{ collection.url }}/type_{{product_type | handle }}" title=""><span>{{product_type}}</span></a>
+                      </li>
+                  {% endif %}
+                  {% endfor %}
+                   
+                </ul>
+            </div>
+
+            <div class="sidebar-section">
+                <input class="ss--state hidden" checked="" id="f-state--color" type="checkbox">
+                <label class="ss--btn" for="f-state--color" title="color">
+                    <h3>color</h3>
+                </label>
+                <ul class="ss--inner advanced-filters color-filters grid-uniform">
+                  {% for tag in collections.all.tags %}
+                  
+                  {% if tag contains 'color_' %}
+                  {% assign tagsstring = tag | split: '_' %}
+                  {% for splittags in tagsstring %}
+                  {% if splittags != 'color' %}
+                    
+                    <li class="a-filter grid-item one-fifth" data-handle="{{splittags}}" data-group="color"><a href="{{ collection.url }}/color_{{splittags}}" class="swatch-bg color-{{splittags}}" data-color="{{splittags}}" title="">{{splittags}}</a></li>
+                    {% endif %}
+                    {% endfor %}
+                  {% endif %}
+                   
+                   
+                  {% endfor %}
+                </ul>
+            </div>
+
+            <div class="sidebar-section">
+                <input type="checkbox" class="read-more-state" id="post-2" />
+                <input class="ss--state hidden" checked="checked" id="f-state--brand" type="checkbox">
+                <label class="ss--btn" for="f-state--brand" title="brand">
+                    <h3>brand</h3>
+                </label>
+                <ul class="ss--inner advanced-filters read-more-wrap filterimg_pf vendor-filters">
+                  {% for product_vendor in shop.vendors %}
+                    <li class="a-filter li-vendor-filter" data-handle="brand_{{ product_vendor | handle }}" data-group="brand"><a href="{{ collection.url }}/brand_{{ product_vendor | handle }}" title="{{ product_vendor }}"><span></span>
+                        <span>{{ product_vendor }}</span></a>
+                    </li>
+                  {% endfor %}
+                </ul>
+            </div>
+
+            <!--<div>
+                <input type="checkbox" class="read-more-state" id="post-2" />
+                <label for="post-2" class="read-more-trigger"></label>
+            </div>-->
+        </div>
+    </aside>
+    <div id="productsArea" class="products-grid grid-item large--four-fifths">
+    <!-- drop down sort by -->
+    <div class="dropdown_fullwidth">
+        <div class="dropdown_sortby">
+          <div class="menu">
+             <span>
+                 <ul id="nav">
+
+                    <li><a href="#">SORT BY <span class="featured_dd">FEATURED</span></a>
+
+                        <div class="subs">
+                            <div class="dropdown_container">
+                               <ul>
+                                  <li><input type="radio" id="featured"  data-name="{{ 'collections.sorting.featured' | t }}" name="radiobtnsort" class="radiobtn_class" value="manual"><label for="featured"><h3>{{ 'collections.sorting.featured' | t }}</h3></label></li>
+                                  <li><input type="radio"  id="bestselling" data-name="{{ 'collections.sorting.best_selling' | t }}" name="radiobtnsort" class="radiobtn_class" value="best-selling"><label for="bestselling"><h3>{{ 'collections.sorting.best_selling' | t }}</h3></label></li>
+                                  <li><input type="radio" id="atoz" data-name="{{ 'collections.sorting.az' | t }}" name="radiobtnsort" class="radiobtn_class" value="title-ascending"><label for="atoz"><h3>{{ 'collections.sorting.az' | t }}</h3></label></li>
+                                  <li><input type="radio" id="ztoa" data-name="{{ 'collections.sorting.za' | t }}" name="radiobtnsort" class="radiobtn_class" value="title-descending"><label for="ztoa"><h3>{{ 'collections.sorting.za' | t }}</h3></label></li>
+                                  <li><input type="radio" id="priceac" data-name="{{ 'collections.sorting.price_ascending' | t }}" name="radiobtnsort" class="radiobtn_class" value="price-ascending"><label for="priceac"><h3>{{ 'collections.sorting.price_ascending' | t }}</h3></label></li>
+                                  <li><input type="radio" id="pricedc" data-name="{{ 'collections.sorting.price_descending' | t }}" name="radiobtnsort" class="radiobtn_class" value="price-descending"><label for="pricedc"><h3>{{ 'collections.sorting.price_descending' | t }}</h3></label></li>  
+                                  <li><input type="radio" id="datedc" data-name="{{ 'collections.sorting.date_descending' | t }}" name="radiobtnsort" class="radiobtn_class" value="created-descending"><label for="datedc"><h3>{{ 'collections.sorting.date_descending' | t }}</h3></label></li>  
+                                  <li><input type="radio" id="dateac" data-name="{{ 'collections.sorting.date_ascending' | t }}" name="radiobtnsort" class="radiobtn_class" value="created-ascending"><label for="dateac"><h3>{{ 'collections.sorting.date_ascending' | t }}</h3></label></li>            
+                               </ul>
+                           </div>
+                       </div>
+                   </li>
+
+
+               </ul>
+           </span>
+       </div>
+   </div>
+</div>
+<!-- drop down sort by -->
+
+<div class="">
+  {% if collection.all_products_count > 0 %}
+  {% for product in collection.products %}
+ <div class="product-grid-item product-item grid-item large--one-quarter medium--one-quarter small--one-half   on-sale">
+    <a class="product-item--link" href="{{ product.url | within: collection }}" title="{{ product.title }}">
+        <div class="product-image">
+            <div class="imod ar--4x5"><img width="130" height="160" class="" src="{{ product.featured_image | product_img_url: 'medium' }}" >
+            </div>
+        </div>
+    </a>
+
+    <a class="pgi-bottom" href="{{ product.url | within: collection }}" title="{{ product.title }}">
+        <span class="product-title">
+            <span class="product-brand">{{ product.vendor }}</span>
+            <span class="product-name">{{ product.title }}</span>
+        </span>
+        <div class="item-price on-sale">
+        {% if product.compare_at_price_max != 0 %}
+        <span class="compare-at-price"><sup class="dollar">$</sup>{{ product.compare_at_price_max  }}</span>
+        {% endif %}
+        <span class="current-price"><sup class="dollar">$</sup> {{ product.variants[0].price | money_without_currency }} </span>
+        </div>
+    </a>
+
+  </div>
+{% endfor %}
+{% else %}
+  <div><h4 class="empty">No Products found in collection!!</h4></div>
+{% endif %}
+</div>
+</div>
+{% if paginate.pages > 1 %}
+  <div class="grid-item pagination-border-top">
+    <div class="grid">
+        <div class="grid-item large--four-fifths push--large--one-fifth">
+            <div class="text-center">
+
+              <div class="w3-container">
+                <div class="w3-center">
+                  <div class="pagination w3-border w3-bar">
+                    {{ paginate | default_pagination | replace: '&laquo; Previous', '&larr;' | replace: 'Next &raquo;', '&rarr;' }}
+                  </div>
+                  
+                </div>
+              </div>  
+
+            </div>
+        </div>
+    </div>
+  </div>
+  
+      
+{% endif %}
+  </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% comment %}
+  Use .grid--rev so that the collection tags appear below the products on mobile
+
+<div class="grid--rev">
+  <div class="grid__item large--three-quarters">
+
+    {% comment %}
+      Different markup if a collection description exists
+    {% endcomment %}
+    {% if collection.description != blank %}
+      <header class="section-header">
+        <h1 class="section-header__title">{{ collection.title }}</h1>
+        <div class="rte rte--header">
+          {{ collection.description }}
+        </div>
+      </header>
+      <hr>
+      <div class="section-header">
+        <div class="section-header__right">
+          {% include 'collection-sorting' %}
+        </div>
+      </div>
+    {% else %}
+      <header class="section-header">
+        <h1 class="section-header__title section-header__left">{{ collection.title }}</h1>
+        <div class="section-header__right">
+          {% include 'collection-sorting' %}
+        </div>
+      </header>
+    {% endif %}
+
+    {% comment %}
+      Use class grid-uniform to have evenly sized columns clear
+      each other properly at each breakpoint.
+    {% endcomment %}
+    <div class="grid-uniform">
+
+      {% comment %}
+        Loop through our products in the current collection.
+        See the snippet 'product-grid-item' for the layout.
+      {% endcomment %}
+      {% for product in collection.products %}
+
+        {% include 'product-grid-item' %}
+
+      {% else %}
+
+        {% if collection.handle == 'all' and current_tags == '' %}
+
+          {% comment %}
+            Add default products to help with onboarding for collections/all only
+          {% endcomment %}
+          {% unless emptyState %}
+            {{ 'theme-onboarding.css' | global_asset_url | stylesheet_tag }}
+            {% assign emptyState = true %}
+          {% endunless %}
+          {% include 'onboarding-empty-collection' %}
+
+        {% else %}
+
+          {% comment %}
+            If collection exists but is empty, display message
+          {% endcomment %}
+          <div class="grid__item">
+            <p>{{ 'collections.general.no_matches' | t }}</p>
+          </div>
+
+        {% endif %}
+
+      {% endfor %}
+
+    </div>
+
+    {% if paginate.pages > 1 %}
+      <hr>
+      <div class="pagination">
+        {{ paginate | default_pagination | replace: '&laquo; Previous', '&larr;' | replace: 'Next &raquo;', '&rarr;' }}
+      </div>
+    {% endif %}
+
+  </div>
+
+  <div class="grid__item large--one-quarter">
+    {% include 'collection-sidebar' %}
+  </div>
+</div>
+{% endcomment %}
+{% endpaginate %}
+
+<div class="overlay-dropdown"></div>
+</main>
+
+
+<!-- dropdown -->
+
+<script type="text/javascript">
+  jQuery(window).load(function() {
+    $("#nav > li > a").click(function (e) { // binding onclick
+          if ($(this).parent().hasClass('selected')) {
+             $('.overlay-dropdown').fadeOut();
+             $(this).removeClass('drop-active');
+     $("#nav .selected div div").slideUp(100); // hiding popups
+     $("#nav .selected").removeClass("selected");
+    }
+    else {
+      $("#nav .selected div div").slideUp(100); // hiding popups
+      $("#nav .selected").removeClass("selected");
+       if ($(this).next(".subs").length) {
+         $('.overlay-dropdown').fadeIn();
+         $(this).addClass('drop-active');
+          $(this).parent().addClass("selected"); // display popup
+          $(this).next(".subs").children().slideDown(200);
+             }
+         }
+         e.stopPropagation();
+     }); 
+      $("body").click(function () { // binding onclick to body
+      $("#nav .selected div div").slideUp(100); // hiding popups
+      $('.overlay-dropdown').fadeOut();
+      $(this).removeClass('drop-active');
+      $("#nav .selected").removeClass("selected");
+    }); 
+       });
+
+    Shopify.queryParams = {};
+
+    if (location.search.length) {
+      for (var aKeyValue, i = 0, aCouples = location.search.substr(1).split('&'); i < aCouples.length; i++) {
+      aKeyValue = aCouples[i].split('=');
+        if (aKeyValue.length > 1) {
+        Shopify.queryParams[decodeURIComponent(aKeyValue[0])] = decodeURIComponent(aKeyValue[1]);
+        
+        
+        }
+      }
+      $(":radio[value={{ collection.sort_by | default: collection.default_sort_by }}]").attr('checked',true);
+      var a = $(":radio[value={{ collection.sort_by | default: collection.default_sort_by }}]").attr('data-name');
+      $("#nav").children('li').find('.featured_dd').html(a);
+    }
+
+    $(document).ready(function(){
+      $('input.radiobtn_class').change(function(){
+           if($(this).is(":checked")) {
+            var a= $(this).attr('data-name');
+            $(this).parents("#nav").children('li').find('.featured_dd').html(a);
+            Shopify.queryParams.sort_by = jQuery(this).val();
+            location.search = jQuery.param(Shopify.queryParams);
+        }
+      });
+
+      var url = window.location.href;
+      var url_parts = url.replace(/\/\s*$/,'').split('/'); 
+      url_parts.shift(); 
+      console.log(url_parts);
+
+      var tag_array = [];
+      {% for tag in collections.all.tags %}
+        tag_array.push('{{tag}}');
+      {% endfor %}
+      
+      var html = "";
+      $.each(tag_array, function( index, value ) {
+        
+        var tag_string_arr = value.split('_');
+        if(tag_string_arr[0] == 'color') {
+          //if( url_parts.length > 4){
+            //var filter_url = window.location+'+'+value;
+          //}
+          //else {
+            var filter_url = window.location+'/'+value;
+          //}
+          html += '<li class="a-filter grid-item one-fifth" data-handle="'+value+'" data-group="color"><a href="'+filter_url+'" class="swatch-bg color-'+tag_string_arr[1]+'" data-color="'+tag_string_arr[1]+'" title="">'+tag_string_arr[1]+'</a></li>';
+        }
+      });
+     // $('ul.color-filters').html(html);
+
+
+      var vendor_array = [];
+      var vendor_name = [];
+      {% for product_vendor in shop.vendors %}
+        vendor_array.push('{{ product_vendor | handle }}');
+        vendor_name.push('{{ product_vendor }}');
+      {% endfor %}
+
+      var vhtml = "";
+      $.each(vendor_array, function( index, value ) {
+        //if( url_parts.length > 4){
+            //var filter_url = window.location+'+'+value;
+        //}
+        //else {
+          var filter_url = window.location+'/'+value;
+        //}
+        vhtml += '<li class="a-filter li-vendor-filter" data-handle="'+value+'" data-group="brand"><a href="'+filter_url+'" title=""><span></span><span>'+vendor_name[index]+'</span></a></li>';
+          
+      });
+      //$('ul.vendor-filters').html(vhtml);
+
+      
+
+      // function selectedvalue() {
+      // debugger;
+      //   $('.li-vendor-filter').each(function(i, val){
+          
+      //     var selected = $(this).attr('data-handle');
+          
+      //     var findcheck1 = '+';
+      //     if(url_parts.length > 4) {
+      //       if(url_parts[4].indexOf(findcheck1) != -1){
+      //         console.log(selected);
+      //         var splitfilter = url_parts[4].split('+');
+              
+      //           for(i = 0; i <= splitfilter.length - 1; i++){
+      //           var findcheck2 = '?';
+      //           var findcheck3 = 'color';
+      //           if(splitfilter[i].indexOf(findcheck2) != -1){
+      //             var splitagain = splitfilter[i].split('?');
+      //             if(splitagain[0] == selected) {
+      //               $(this).addClass('active-filter');
+      //             }
+      //           }
+      //           else if(splitfilter[i].indexOf(findcheck3) == -1) {
+      //             if(splitfilter[i] == selected) {
+      //               $(this).addClass('active-filter');
+      //             }
+      //           }
+      //         }
+      //       }
+      //     }
+      //   });
+      // }
+      selectedvendor();
+      function selectedvendor() {
+          //debugger;
+          var findcheck = '?';
+          $('.li-vendor-filter').each(function(i, val){
+            var selected = $(this).attr('data-handle');
+            if(url_parts.length > 4 && url_parts[4] == selected ) {
+              $(this).addClass('active-filter');
+            }
+            else if(url_parts.length > 4 && url_parts[4].indexOf(findcheck) != -1) {
+              var spliited = url_parts[4].split('?');
+              if(spliited[0] == selected) {
+                $(this).addClass('active-filter');
+              }
+            }
+          });
+      }
+
+      selectedtype();
+      function selectedtype() {
+        //  debugger;
+          var findcheck = '?';
+          $('.li-type-filter').each(function(i, val){
+            var selected = $(this).attr('data-handle');
+            if(url_parts.length > 4 && url_parts[4] == selected ) {
+              $(this).addClass('active-filter');
+            }
+            else if(url_parts.length > 4 && url_parts[4].indexOf(findcheck) != -1) {
+              var spliited = url_parts[4].split('?');
+              if(spliited[0] == selected) {
+                $(this).addClass('active-filter');
+              }
+            }
+          });
+      }
+
+    });
+
+    
+
+</script>
+<!-- dropdown --> 

@@ -1,0 +1,566 @@
+<!-- /templates/product.liquid -->
+{% comment %}
+
+  Rich snippets (itemscope, itemtype, etc.) for products are a theme requirement,
+  and allow search engines to easily understand what the content is.
+
+  For more information on these Scheme.org tags, visit:
+    - http://schema.org/docs/gs.html
+
+{% endcomment %}
+{% assign isliveauc = 0 %}
+{% for collection in product.collections %}
+
+    {% if collection.handle == 'live-auctions' %}
+        {% assign isliveauc = 1 %}
+    {% endif %}
+{% endfor %}
+
+{% include 'infonavbar' %}
+<main class="wrapper main-content">
+<div itemscope itemtype="http://schema.org/Product">
+
+  <meta itemprop="url" content="{{ shop.url }}{{ product.url }}">
+  <meta itemprop="image" content="{{ product.featured_image.src | img_url: 'grande' }}">
+
+  {% comment %}
+    Get first variant, or deep linked one
+  {% endcomment %}
+  {% assign current_variant = product.selected_or_first_available_variant %}
+
+  {% include 'breadcrumb' %}
+
+  <div class="product-top-section grid">
+            <div class="product-details-left grid-item medium--one-whole large--six-twelfths">
+                <div class="grid">
+                    <div class="grid-item large--eleven-twelfths text-center">
+                       <!-- jssor slider -->
+                       <div class="thumbnailviewslider">
+                        <ul id="lightSlider">
+                          {% assign featured_image = current_variant.featured_image | default: product.featured_image %}
+                            <li data-thumb="{{ featured_image | img_url: 'medium' }}">
+                                <img src="{{ featured_image | img_url: 'large' }}" alt="{{ featured_image.alt | escape }}"  />
+                            </li>
+                            {% if product.images.size > 1 %}
+                              {% for image in product.images %}
+                                <li data-thumb="{{ image.src | img_url: 'compact' }}">
+                                  <img src="{{ image.src | img_url: 'large' }}"  />
+                                </li>
+                              {% endfor %}
+                            {% endif %}
+                        </ul>
+                    </div>
+                    
+                    <!-- jssor slider -->
+                    
+
+                </div>
+            </div>
+        </div>
+        <div class="grid-item medium--one-whole large--six-twelfths product-details">
+            <div title="" class="product-meta product-brand">
+                <span>{{ product.vendor }}</span>
+            </div>
+            <h1 class="product-title">{{ product.title }}</h1>
+            <div class="product-sku-container">
+              {% assign current_variant = product.selected_or_first_available_variant %}
+                <span class="variant-sku-title">Product SKU: </span>
+                <span class="variant-sku">{{ current_variant.sku }}</span>
+            </div>
+            <div class="product-price">
+            {% for collection in product.collections %}
+            {% if collection.handle == 'live-auctions' and product.metafields.auction.minprice %}
+                <div class="timer_productdiv">
+                    <p class="timer_product" id="demo"></p>
+                </div>
+            {% endif %}
+            {% endfor %}
+            {% if isliveauc == 0 %}
+                
+                {% if product.compare_at_price_max != 0 %}
+                    <span id="salePrice" class="compare-at-price"><sup class="dollar">$</sup>  {{ product.compare_at_price_max | money_without_currency }} </span>
+                {% endif %}
+                <span id="productPrice" class="current-price"><sup class="dollar">$</sup>  {{ product.price | money_without_currency }}</span><span class="plus-free-shipping"> + Free Shipping</span>
+
+            {% endif %}
+            
+            </div>
+
+            <form method="post" action="/cart" style="display: none;">
+                <button type="submit" value="Checkout" name="checkout" id="straightToCart"></button>
+            </form>
+            <form method="post" action="/cart/add" enctype="multipart/form-data" id="addToCartForm">
+                <!--<div class="selector-wrapper">
+                    <select class="single-option-selector" data-option="option1" id="productSelect-option-0">
+                        <option value="Default" selected="selected">Default</option>
+                    </select>
+                </div>-->
+                
+                <select name="id" id="productSelect" class="default-product-variants-selector" style="display: none;">
+                  
+                    {% if product.variants[0].available %}
+                      <option selected="selected" data-sku="{{ product.variants[0].sku }}" value="{{ product.variants[0].id }}">{{ product.name }}</option>
+                    {% endif %}
+                  
+                </select>
+
+                 {% assign count = 1 %}
+
+                 {% for collection in product.collections %}
+                 
+                    {% assign handle = 'addon' | append: count %}
+                        {% if collection.handle == 'addon1' or collection.handle == 'addon2' or collection.handle == 'addon3' or collection.handle == 'addon4' or collection.handle == 'addon5' or collection.handle == 'addon6' or collection.handle == 'addon7' or collection.handle == 'addon8' or collection.handle == 'addon9' or collection.handle == 'addon10' or collection.handle == 'addon11' or collection.handle == 'addon12' or collection.handle == 'addon13' or collection.handle == 'addon14' or collection.handle == 'addon15' or collection.handle == 'addon16' or collection.handle == 'addon17' or collection.handle == 'addon18' or collection.handle == 'addon19' or collection.handle == 'addon20' %}
+                            {% assign addonhandle = collection.handle %}
+                        {% endif %}
+
+                    {% assign count = count | plus: 1 %}
+                {% endfor %} 
+                
+                {% if product.type == 'addon_product' %}
+                    {% assign addons = 1 %}
+                {% endif %}
+				
+                {% if addons == 1 %}
+               
+                {% assign addonprods = collections[addonhandle] %}
+                
+                {% comment %}<input id="attachmentBundleId" name="properties[Bundle ID]" value="{{ product.variants.first.id }}" type="hidden">{% endcomment %}
+                <div class="option-line swatch attachment-swatch clearfix">
+                    <div class="option-header">
+                        <span class="option-type">Choose Add-ons: </span>
+                        <span class="option-value number-font"></span>
+                    </div>
+                    <div class="option-content attachment-carousel">
+                        
+                        {% for product in addonprods.products limit: 4 %} 
+                        
+                        {% assign variant = product.selected_or_first_available_variant %}
+                        {% if product.price == 0 %} 
+                            {% comment %}<input id="includedFree" name="properties[Included Free]" value="{{ product.title }}" type="hidden">{% endcomment %}
+                            <div data-value="{{ variant.id }}" class="carousel-cell swatch-element attachment-default available hover-effect selected-thumbnail">
+                                <label class="swatch-label glass-bowl-bundle-swatch-label swatch-bg" data-attachmentid="{{ variant.id }}" data-attachmenttitle="{{ product.title }}" for="swatch-{{ variant.id }}">
+                                    <input id="swatch-{{ variant.id }}" class="hidden-input attachment-checkbox checkbox-default" name="attachment-product" value="{{ variant.id }}" type="checkbox" checked disabled>
+                                    <div class="option-check-container">
+                                        <span></span>
+                                    </div>
+                                    <div class="option-image-circle color-swatch-image-circle">
+                                        {% if product.images.size > 1 %}
+                                            <div class="imod imod-loaded"><img class=" lazyloaded" src="{{ product.featured_image | product_img_url: 'medium' }}">
+                                        {% else %}
+                                            <div class="imod imod-loaded"><img class=" lazyloaded" src="{{ 'default-product-img.png' | asset_url }}">
+                                        {% endif %}
+                                        </div>
+                                    </div>
+                                    <span class="attachment-title">{{ product.title }}</span>
+                                    <span class="attachment-price"><span class="attachment-included-free">Free!</span></span>
+                                </label>
+                            </div>
+                        {% elsif product.tags.size == 0 %}
+                            <div data-value="{{ variant.id }}" class="carousel-cell swatch-element  available hover-effect">
+                                <label class="swatch-label {{ product.handle }}-bundle-swatch-label swatch-bg" data-attachmentid="{{ variant.id }}" data-attachmenttitle="{{ product.title }}" for="swatch-{{ variant.id }}">
+                                    <input data-attachmentid="{{ variant.id }}" data-attprice="{{ product.price }}" id="swatch-{{ variant.id }}" class="hidden-input attachment-checkbox " name="attachment-product" value="{{ variant.id }}" type="checkbox">
+                                    <div class="option-check-container">
+                                        <span></span>
+                                    </div>
+                                    <div class="option-image-circle color-swatch-image-circle">
+                                        <div class="imod ar--1x1 imod-loaded"><img class=" lazyloaded" src="{{ product.featured_image | product_img_url: 'medium' }}">
+                                        </div>
+                                    </div>
+                                    <span class="attachment-title">{{ product.title }}</span>
+                                    <span class="attachment-price">+ <span>
+                                    <sup class="dollar">$</sup> {{ product.price | money_without_currency }} </span></span>
+                                </label>
+                            </div>
+                        {% endif %}
+                        {% endfor %}
+                       
+                    </div>
+                </div>
+
+                {% endif %}
+                        {% if product.available %} 
+                        {% for collection in product.collections %}
+                          
+
+                          {% if collection.handle == 'live-auctions' %}
+                            <!-- timer -->  
+                              <div class="timer_price">
+                                   <h6> <span class="mrp_product_price last_bid"></span>
+                                    <input type="hidden" id="last_bid_price" value="0" /> </h6>                          
+                                {% for address in customer.addresses %}
+
+                                    {% if address.street %}
+                                        {% assign isaddress = 1 %}
+                                    {% else %}
+                                        {% assign isaddress = 0 %}
+                                    {% endif %}
+                                    
+                                    {% endfor %}
+
+                                {% if customer %}
+                                <!-- drop down sort by -->
+
+                                {% if isaddress == 1 %}
+                                <div class="bidnow_main" style="display: block;">
+                                    <div class="mrp_product auction-bids bidnow1">
+                                        <table border="0" cellspacing="0" cellpadding="0">
+                                        <tr>
+                                            <td>Starting Price:</td>
+                                            <td>
+                                                <p class="start-price"><sup class="dollar-n">$</sup>{{product.metafields.auction.minprice}}.00</p>
+                                                <div class="bid-details">
+                                                    <input type="text" class="bidding_text" name="bid_price" id="bid_price" /> 
+                                                    <input type="hidden" id="shop_name" value="{{ shop.url }}" />
+                                                    <button type="button" class="bidnow_btn" id="place_bid" >
+                                                    Place Bid
+                                                    </button>
+                                                    <div class="error"></div>
+                                                    <div class="success"></div>
+                                                    <a href="#modal" id="myBtn">View Bids</a>
+                                                    <p>Enter US <span id="lastbidd">${{product.metafields.auction.minprice}}</span> or more</p>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </table>
+                                    </div>
+                                    
+                                {% else %}
+
+                                    <div class="bidnow_main" style="display: block">
+                                        <a href="/account/addresses" class="bid-now-btn">Add Address to bid</a>
+                                    </div>
+                               
+                                {% endif %}
+                                <!-- drop down sort by -->
+                                
+                                {% else %}
+                                   <div class="bidnow_main bidnow2">
+                                      <a href="/account/login" class="bid-now-btn login-for-bid">Please Login to place bid</a>
+                                   </div>
+                                {% endif %}
+
+                                <div class="mrp_product auction-bids" style="border:0;" >
+                                        <table border="0" cellspacing="0" cellpadding="0" style="border:0;">
+                                        <tr>
+                                            <td>Price:</td>
+                                            <td>
+                                                <p class="start-price"><sup class="dollar-n">$</sup>{{ product.variants[0].price | money_without_currency }}</span><span class="plus-free-shipping"></p>
+                                                 <button id="oneClickCheckoutBtn" class="btn">
+                                                    <span id="oneClickCheckoutText">Buy Now</span>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        </table>
+                                    </div>
+                                <!--  <a href="#" class="bid-now-btn">Bid now</a> -->
+                                </div>
+                                </div>
+                              <!-- timer -->
+                          {% endif %}
+                        {% endfor %}
+                        <div class="grid addToCartAndOneClick button-multiple">
+
+                        {% if isliveauc == 0 %}
+                            <div class="grid-item small--one-whole medium--one-whole one-half button-options">
+                                <div class="addToCartContainer"><span id="variantQuantity" class="variant-quantity"></span>
+                                    <label id="quantityLabel" for="quantity">
+                                        <span>Qty</span>
+                                        <select id="quantity" class="number-font" name="quantity">
+                                            <option value="1" selected="selected">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
+                                            <option value="8">8</option>
+                                            <option value="9">9</option>
+                                            <option value="10">10</option>
+                                        </select>
+                                            <img src="data:image/svg+xml;utf8;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pgo8IS0tIEdlbmVyYXRvcjogQWRvYmUgSWxsdXN0cmF0b3IgMTYuMC4wLCBTVkcgRXhwb3J0IFBsdWctSW4gLiBTVkcgVmVyc2lvbjogNi4wMCBCdWlsZCAwKSAgLS0+CjwhRE9DVFlQRSBzdmcgUFVCTElDICItLy9XM0MvL0RURCBTVkcgMS4xLy9FTiIgImh0dHA6Ly93d3cudzMub3JnL0dyYXBoaWNzL1NWRy8xLjEvRFREL3N2ZzExLmR0ZCI+CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4bWxuczp4bGluaz0iaHR0cDovL3d3dy53My5vcmcvMTk5OS94bGluayIgdmVyc2lvbj0iMS4xIiBpZD0iQ2FwYV8xIiB4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjUxMnB4IiBoZWlnaHQ9IjUxMnB4IiB2aWV3Qm94PSIwIDAgMjkyLjM2MiAyOTIuMzYyIiBzdHlsZT0iZW5hYmxlLWJhY2tncm91bmQ6bmV3IDAgMCAyOTIuMzYyIDI5Mi4zNjI7IiB4bWw6c3BhY2U9InByZXNlcnZlIj4KPGc+Cgk8cGF0aCBkPSJNMjg2LjkzNSw2OS4zNzdjLTMuNjE0LTMuNjE3LTcuODk4LTUuNDI0LTEyLjg0OC01LjQyNEgxOC4yNzRjLTQuOTUyLDAtOS4yMzMsMS44MDctMTIuODUsNS40MjQgICBDMS44MDcsNzIuOTk4LDAsNzcuMjc5LDAsODIuMjI4YzAsNC45NDgsMS44MDcsOS4yMjksNS40MjQsMTIuODQ3bDEyNy45MDcsMTI3LjkwN2MzLjYyMSwzLjYxNyw3LjkwMiw1LjQyOCwxMi44NSw1LjQyOCAgIHM5LjIzMy0xLjgxMSwxMi44NDctNS40MjhMMjg2LjkzNSw5NS4wNzRjMy42MTMtMy42MTcsNS40MjctNy44OTgsNS40MjctMTIuODQ3QzI5Mi4zNjIsNzcuMjc5LDI5MC41NDgsNzIuOTk4LDI4Ni45MzUsNjkuMzc3eiIgZmlsbD0iI0ZGRkZGRiIvPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+CjxnPgo8L2c+Cjwvc3ZnPgo=" style="width: 10px;position: absolute;top: 15px;right: 13px;" />
+                                    </label>
+
+                                    <button type="submit" name="add" id="addToCart" class="btn">
+                                        <span id="addToCartText">Add to Cart</span>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="grid-item small--one-whole medium--one-whole one-half button-options">
+                                <button id="oneClickCheckoutBtn" class="btn">
+                                    <span id="oneClickCheckoutText">Buy Now</span>
+                                </button>
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% else %} <p class="oostock"> Out Of Stock!! </p>
+                        {% endif %}
+                    </form>
+                   
+                   {% if collection.handle != 'live-auctions' %} 
+                    <div class="product-sharing">
+                        <!--<div class="social-sharing is-default" data-permalink="">
+                            <a target="_blank" href="#" class="share-facebook">
+                                <span class="icon icon-facebook"></span>
+                                <span class="share-title">Share</span><span class="share-count">0</span>
+                            </a>
+                            <a target="_blank" href="#" class="share-twitter">
+                                <span class="icon icon-twitter"></span>
+                                <span class="share-title">Tweet</span><span class="share-count">0</span>
+                            </a>
+                            
+                        </div>-->
+                        <div class="addthis_inline_share_toolbox"></div>
+                    </div>
+                        {% endif %}
+                    
+
+                </div>
+
+            </div>
+
+            <div class="product-sections" id="product-sections">
+                <section class="product-description section alt-bg">
+                    <div class="grid">
+                        <div class="grid-item large--one-half">
+                            <h3 class="product-description--title">
+                              <span class="product-description--brand">{{ product.vendor }}</span>
+                              <span>{{ product.title }}</span>
+                          </h3>
+                      </div>
+                      <div class="grid-item large--two-fifths">
+                        <div class="product-description--text text-right" itemprop="description">
+                            <p>{{ product.description }}</p>
+                        </div>
+                      </div>
+                    </div>
+                </section>
+                {% for collection in product.collections %}
+                  
+                  {% if collection.handle == 'latest-products' or collection.handle == 'popular-brands' %}
+
+                  {% else %}
+                    {% assign mycollectionhandle = collection.handle %}
+                   
+                  {% endif %}
+
+                {% endfor %}
+                
+                {% assign mycollprods = collections[mycollectionhandle] %}
+                    {% if mycollprods.all_products_count > 0 %}
+                <section class="accessories-that-fit section">
+                <div class="grid">
+                    <div class="grid-item">
+                        <h2 class="section-header">Similar Products</h2>
+                    </div>
+                    <ul id="flexiselDemo3">
+                      {% for product in mycollprods.products limit: 8 %} 
+
+                        <li>
+                            <a href="{{ product.url }}" >
+                                <img width="120px" src="{{ product.featured_image | product_img_url: 'medium' }}" />
+                            </a>
+                            <div class="product-grid-item product-item grid-item small--one-third medium--one-fifth large--one-eighth no-swatches " style="float:left; width:100%;"> <br>
+                                <a class="pgi-bottom" href="{{ product.url }}" title="{{ product.title }}">
+                                    <span class="product-title">
+                                        <span class="product-brand">{{ product.vendor }}</span>
+                                        <span class="product-name">{{ product.title }}</span>
+                                    </span>
+                                    <div class="item-price ">
+                                        <span class="current-price">
+                                            <sup class="dollar">$</sup>{{ product.variants[0].price | money_without_currency }}
+                                        </span>
+                                    </div>
+                                </a>
+                            </div>
+                        </li>
+                        {% endfor %}
+                        </ul>
+                    </div>
+                  </section>
+                  {% endif %}
+            </div>
+
+
+</div>
+<!-- modal -->
+
+<div class="remodal" data-remodal-id="modal">
+  <button data-remodal-action="close" class="remodal-close"></button>
+  <h1>All Bids</h1>
+  <table class="table table-responsive table-bordered table-striped" style="margin-top: 20px;">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Customer Name</th>
+        <th>Bid Placed</th>
+      </tr>
+    </thead>
+    <tbody id="show_bids_by_prod">
+        
+    </tbody>
+  </table>
+  <br>
+  <button data-remodal-action="confirm" class="remodal-confirm">Ok</button>
+</div>
+
+<!-- modal -->
+</main>
+
+
+<script>
+
+
+   $(document).ready(function(){
+     $('input.attachment-checkbox').change(function(){
+         if($(this).is(":checked")) {
+             $(this).parents(".swatch-element" ).addClass("selected-thumbnail");
+         } else {
+             $(this).parents(".swatch-element" ).removeClass("selected-thumbnail");
+         }
+     });
+     $('#bid_price').bind("cut copy paste",function(e) {
+        e.preventDefault();
+    });
+ });
+
+
+
+    $('#lightSlider').lightSlider({
+      gallery: true,
+      item: 1,
+      loop: true,
+      slideMargin: 0,
+      thumbItem: 5
+    });
+
+    $('#addToCartForm').submit(function(e) {
+    
+      e.preventDefault();
+
+      // Add class to be styled if desired
+      //$addToCart.removeClass('is-added').addClass('is-adding');
+
+      // Remove any previous quantity errors
+      //$('.qty-error').remove();
+
+      Shopify.addItemFromForm(e.target, "", "");
+
+      // Set the flip button to a loading state
+      //switch (settings.method) {
+        //case 'flip':
+          //$flipContainer.addClass('flip--is-loading');
+          //break;
+     // }
+    });
+
+</script>
+{% if isliveauc == 1 %}
+<script>
+// Set the date we're counting down to
+
+var enddate = new Date("{{product.metafields.auction.end}}");
+enddate.setDate(enddate.getDate() + 1);
+var countDownDate = enddate.getTime();
+var customer_id = '{{ customer.id }}';
+var customer_name = '{{ customer.name }}';
+var customer_email = '{{customer.email}}';
+var product_id = '{{ product.id }}';
+var product_name = '{{ product.title }}'
+var min_price = '{{ product.metafields.auction.minprice }}';
+var bid_increement = '{{ product.metafields.auction.bid_increement }}';
+var shop_url = '{{ shop.url }}';
+var ending_date = '{{product.metafields.auction.end}}';
+// Update the count down every 1 second
+var x = setInterval(function() {
+
+    // Get todays date and time
+    var now = new Date().getTime();
+    //console.log()
+    // Find the distance between now an the count down date
+    var distance = countDownDate - now;
+    
+    // Time calculations for days, hours, minutes and seconds
+    var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+    var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+    var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+    if(days > 1) {
+        var daytext = "days";
+    }
+    else {
+        var daytext = "day";
+    }
+    if(hours < 10) {
+      hours = '0'+hours;
+    }
+
+    if(minutes < 10) {
+      minutes = '0'+minutes;
+    }
+
+    if(seconds < 10) {
+      seconds = '0'+seconds;
+    }
+
+    // Output the result in an element with id="demo"
+    if(isNaN(countDownDate)){
+        $('.bidnow1').hide();
+        $('.bidnow2').hide();
+        $('.bidnow3').hide();
+        return false;
+    }
+    document.getElementById("demo").innerHTML = "Time Left: " + days + " " + daytext + " " + hours + ":"
+    + minutes + ":" + seconds;
+  
+    // If the count down is over, write some text 
+    if (distance < 0) {
+        clearInterval(x);
+        document.getElementById("demo").innerHTML = "AUCTION EXPIRED!!";
+        getwinner(product_id, shop_url);
+        //setTimeout(function(){
+          $('.bidnow1').hide();
+          $('.bidnow2').hide();
+          $('.bidnow3').hide();
+       // }, 1000);
+        
+    }
+    
+}, 1000);
+
+    $('a.bid-now-btn').click(function(){
+     //   $(this).siblings('p').toggleClass('hide-bid-form').toggleClass('show-bid-form');
+        //return false;
+    });
+
+    
+
+    //checkbid(customer_id, product_id);
+    getlastbid(product_id, bid_increement);
+
+    $('#place_bid').click(function(e){
+
+      //e.preventDefault();
+      
+      placemybid(customer_id, customer_name, product_id, product_name, min_price, bid_increement, ending_date);
+    });
+
+    $("#bid_price").keypress(function (e) {
+    //if the letter is not digit then display error and don't type anything
+    if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+        //display error message
+        $("#errmsg").html("Digits Only").show().fadeOut("slow");
+        return false;
+    }
+   });
+    
+   
+
+// When the user clicks on the button, open the modal 
+$('#myBtn').click(function(){
+    getproductbids(product_id);
+});
+
+
+</script>
+{% endif %}
